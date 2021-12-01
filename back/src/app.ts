@@ -1,16 +1,29 @@
 import * as express from "express";
+import morgan from "morgan";
+import { type } from "os";
+import path from "path";
+// import { sequelize } from "../models";
+const { sequelize } = require("../models");
 
 const app: express.Express = express();
 
 app.set("PORT", Number(process.env.PORT) | 3055);
 
-app.use((req, res, next) => {
-  console.log(req.rawHeaders[1]);
-  console.log("this is logging middleware");
-  next();
-});
+sequelize
+  .sync({ force: false })
+  .then(() => {
+    console.log("db connected");
+  })
+  .catch((err: any) => {
+    if (err instanceof Error) {
+      console.log(err);
+    }
+  });
+
+app.use(morgan("dev"));
 
 //* json middleware
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
 // * loggin middleware

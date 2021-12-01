@@ -1,0 +1,23 @@
+{
+  "name": "ipm",
+  "version": "1.0.0",
+  "description": "integrated password management",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/punkryn/IPM.git"
+  },
+  "author": "punkryn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/punkryn/IPM/issues"
+  },
+  "homepage": "https://github.com/punkryn/IPM#readme",
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}

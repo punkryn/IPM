@@ -1,26 +1,25 @@
-import * as express from "express";
+import express from "express";
 import morgan from "morgan";
-import { type } from "os";
 import path from "path";
-// import { sequelize } from "../models";
-const { sequelize } = require("../models");
+import dotenv from "dotenv";
+import mysql from "mysql2/promise";
+
+dotenv.config();
 
 const app: express.Express = express();
 
 app.set("PORT", Number(process.env.PORT) | 3055);
 
-sequelize
-  .sync({ force: false })
-  .then(() => {
-    console.log("db connected");
-  })
-  .catch((err: any) => {
-    if (err instanceof Error) {
-      console.log(err);
-    }
-  });
-
 app.use(morgan("dev"));
+
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT),
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DBNAME,
+  connectionLimit: 10,
+});
 
 //* json middleware
 app.use(express.static(path.join(__dirname, "public")));
@@ -33,8 +32,13 @@ app.get("/", (req, res, next) => {
 });
 
 //* ROUTER
-app.get("/", (req, res) => {
-  res.send("success");
+app.get("/", async (req, res) => {
+  try {
+    const data = await pool.query("select * from users");
+    res.json(data[0]);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 // * 404 middleware
@@ -43,6 +47,6 @@ app.use((req, res, next) => {
   res.send({ error: "404 not found" });
 });
 
-app.listen(app.get("PORT"), () => {
+app.listen(app.get("PORT"), async () => {
   console.log(`server is on... ${app.get("PORT")}`);
 });

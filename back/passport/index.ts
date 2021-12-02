@@ -8,7 +8,6 @@ export default () => {
     if (Array.isArray(user)) {
       if (Array.isArray(user[0])) {
         if ("id" in user[0][0]) {
-          console.log(user[0][0].id);
           done(null, user[0][0].id);
         }
       }

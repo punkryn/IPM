@@ -1,11 +1,12 @@
 import express from "express";
 import pool from "../pool";
 import bcrpyt from "bcrypt";
-import { nextTick } from "process";
+import passport from "passport";
+import { isNotLoggedIn } from "./middlewares";
 
 const router = express.Router();
 
-router.post("/users", async (req, res, next) => {
+router.post("/users", isNotLoggedIn, async (req, res, next) => {
   const body = req.body;
   try {
     console.log(body);
@@ -27,6 +28,32 @@ router.post("/users", async (req, res, next) => {
       next(err);
     }
   }
+});
+
+router.post("/users/login", isNotLoggedIn, (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      console.error(err);
+      return next(err);
+    }
+    if (info) {
+      return res.status(401).send(info.reason);
+    }
+    return req.login(user, async (loginErr) => {
+      if (loginErr) {
+        console.error(loginErr);
+        return next(loginErr);
+      }
+
+      console.log("userid", user[0][0]);
+      const response = await pool.query(
+        `select id, nickname, email from users where id = "${user[0][0].id}"`
+      );
+      if (Array.isArray(response[0])) {
+        return res.status(200).json(response[0][0]);
+      }
+    });
+  })(req, res, next);
 });
 
 export default router;

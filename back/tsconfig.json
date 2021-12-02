@@ -2,18 +2,10 @@
 
 {
   "compilerOptions": {
-    "esModuleInterop": true,
     "strict": true,
-    "module": "commonjs",
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "ES6",
-    "sourceMap": true,
+    "lib": ["es2020"],
+    "esModuleInterop": true,
     "outDir": "./dist",
-    "baseUrl": "./",
-    "incremental": true
+    "moduleResolution": "node"
   }
 }

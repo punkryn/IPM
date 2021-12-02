@@ -5,12 +5,17 @@ import dotenv from "dotenv";
 import pool from "./pool";
 import cors from "cors";
 import apiRouter from "./routes/api";
+import expressSession from "express-session";
+import cookieParser from "cookie-parser";
+import passport from "passport";
+import passportConfig from "./passport";
 
 dotenv.config();
 
 const app: express.Express = express();
 
 app.set("PORT", Number(process.env.PORT) | 3055);
+passportConfig();
 
 const prod = process.env.NODE_ENV === "production";
 
@@ -32,6 +37,23 @@ if (prod) {
 //* json middleware
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(
+  expressSession({
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.COOKIE_SECRET!,
+    cookie: {
+      httpOnly: true,
+      secure: false, // https -> true
+      domain: prod ? ".nodebird.com" : undefined,
+    },
+    name: "rnbck",
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 // * loggin middleware
 app.get("/", (req, res, next) => {

@@ -1,4 +1,5 @@
 import useInput from '@hooks/useInput';
+import axios from 'axios';
 import React, { useCallback, useState, VFC } from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Success, Error, Label, Input, LinkContainer, Button, Header } from './styles';
@@ -35,20 +36,21 @@ const SignUp = () => {
         console.log('sign up to server');
         setSignUpError('');
         setSignUpSuccess(false);
-        // axios.post('/api/users', {
-        //   email,
-        //   nickname,
-        //   password,
-        // })
-        //   .then((response) => {
-        //     console.log(response);
-        //     setSignUpSuccess(true);
-        //   })
-        //   .catch((error) => {
-        //     console.log(error.response);
-        //     setSignUpError(error.response.data);
-        //   })
-        //   .finally(() => { });
+        axios
+          .post('/api/users', {
+            email,
+            nickname,
+            password,
+          })
+          .then((response) => {
+            console.log(response);
+            setSignUpSuccess(true);
+          })
+          .catch((error) => {
+            console.log(error.response);
+            setSignUpError(error.response.data);
+          })
+          .finally(() => {});
       }
     },
     [email, nickname, password, passwordCheck, mismatchError],

@@ -4,6 +4,7 @@ import loadable from '@loadable/component';
 
 const SignUp = loadable(() => import('@pages/SignUp'));
 const Login = loadable(() => import('@pages/LogIn'));
+const List = loadable(() => import('@pages/List'));
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
       <Route path="/" element={<Navigate replace to="/login" />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
+      <Route path="/main" element={<List />} />
     </Routes>
   );
 };

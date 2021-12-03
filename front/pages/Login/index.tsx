@@ -2,12 +2,14 @@ import React, { useState, useCallback } from 'react';
 import { Header, Form, Label, Input, Error, Button, LinkContainer } from '@pages/SignUp/styles';
 import axios from 'axios';
 import useInput from '@hooks/useInput';
-import { Link } from 'react-router-dom';
-// import useSWR from 'swr';
-// import fetcher from '@utils/fetcher';
+import { Link, Navigate } from 'react-router-dom';
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
 
 const LogIn = () => {
-  // const { data, error, mutate } = useSWR('/api/users', fetcher);
+  const { data, error, mutate } = useSWR('/api/users', fetcher, {
+    dedupingInterval: 100000,
+  });
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
   const [logInError, setLogInError] = useState(false);
@@ -19,7 +21,7 @@ const LogIn = () => {
       axios
         .post('/api/users/login', { email, password }, { withCredentials: true })
         .then((response) => {
-          // mutate();
+          mutate();
         })
         .catch((error) => {
           setLogInError(error.response?.data?.statusCode === 401);
@@ -28,14 +30,15 @@ const LogIn = () => {
     [email, password],
   );
 
-  // if (data === undefined) {
-  //   return <div>로딩중...</div>;
-  // }
-
-  // if (data) {
-  //   console.log("redirect");
-  //   return <Redirect to="/workspace/sleact/channel/일반" />;
-  // }
+  // console.log(data);
+  if (data === undefined) {
+    return <div>로딩중...</div>;
+  }
+  console.log(data);
+  if (data) {
+    console.log('redirect');
+    return <Navigate to="/main" />;
+  }
 
   return (
     <div id="container">

@@ -6,6 +6,10 @@ import { isNotLoggedIn } from "./middlewares";
 
 const router = express.Router();
 
+router.get("/users", (req, res, next) => {
+  return res.json(req.user || false);
+});
+
 router.post("/users", isNotLoggedIn, async (req, res, next) => {
   const body = req.body;
   try {

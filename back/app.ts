@@ -47,9 +47,9 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: false, // https -> true
-      domain: prod ? ".nodebird.com" : undefined,
+      domain: prod ? ".ipm.com" : undefined,
     },
-    name: "rnbck",
+    name: "connect.sid",
   })
 );
 app.use(passport.initialize());

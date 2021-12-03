@@ -2,7 +2,7 @@ import express from "express";
 import pool from "../pool";
 import bcrpyt from "bcrypt";
 import passport from "passport";
-import { isNotLoggedIn } from "./middlewares";
+import { isLoggedIn, isNotLoggedIn } from "./middlewares";
 
 const router = express.Router();
 
@@ -58,6 +58,13 @@ router.post("/users/login", isNotLoggedIn, (req, res, next) => {
       }
     });
   })(req, res, next);
+});
+
+router.post("/users/logout", isLoggedIn, (req, res) => {
+  req.logout();
+  req.session.destroy(() => {
+    res.send("logout ok");
+  });
 });
 
 export default router;

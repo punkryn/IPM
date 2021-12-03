@@ -4,7 +4,7 @@ import loadable from '@loadable/component';
 
 const SignUp = loadable(() => import('@pages/SignUp'));
 const Login = loadable(() => import('@pages/LogIn'));
-const List = loadable(() => import('@pages/List'));
+const List = loadable(() => import('@layouts/Workspace'));
 
 const App = () => {
   return (

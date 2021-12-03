@@ -1,10 +1,13 @@
 import useInput from '@hooks/useInput';
+import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import React, { useCallback, useState, VFC } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
+import useSWR from 'swr';
 import { Form, Success, Error, Label, Input, LinkContainer, Button, Header } from './styles';
 
 const SignUp = () => {
+  const { data, error, mutate } = useSWR('/api/users', fetcher);
   const [email, onChangeEmail] = useInput('');
   const [nickname, onChangeNickname] = useInput('');
   const [password, , setPassword] = useInput('');
@@ -56,14 +59,14 @@ const SignUp = () => {
     [email, nickname, password, passwordCheck, mismatchError],
   );
 
-  // if (data === undefined) {
-  //   return <div>로딩중...</div>;
-  // }
+  if (data === undefined) {
+    return <div>로딩중...</div>;
+  }
 
-  // if (data) {
-  //   console.log("redirect");
-  //   return <Redirect to="/workspace/sleact/channel/일반" />;
-  // }
+  if (data) {
+    console.log('redirect');
+    return <Navigate to="/main" />;
+  }
 
   return (
     <div id="container">

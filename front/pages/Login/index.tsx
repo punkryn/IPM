@@ -24,7 +24,7 @@ const LogIn = () => {
           mutate();
         })
         .catch((error) => {
-          setLogInError(error.response?.data?.statusCode === 401);
+          setLogInError(error.response?.status === 401);
         });
     },
     [email, password],
@@ -33,7 +33,7 @@ const LogIn = () => {
   if (data === undefined) {
     return <div>로딩중...</div>;
   }
-  console.log(data);
+
   if (data) {
     console.log('redirect');
     return <Navigate to="/main" />;

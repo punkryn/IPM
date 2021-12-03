@@ -18,3 +18,8 @@ HTTP 요청 리스트(ajax)
 
 - 내 로그인 정보를 가져옴, 로그인되어있지 않으면 false
 - return: IUser | false
+
+### POST /users/logout
+
+- 로그아웃
+- return: 'logout ok'

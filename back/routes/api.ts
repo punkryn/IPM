@@ -25,6 +25,13 @@ router.post("/users", isNotLoggedIn, async (req, res, next) => {
     const hashedPassword = await bcrpyt.hash(body.password, 12);
     const queryString = `insert into users(email, nickname, password) values("${body.email}", "${body.nickname}", "${hashedPassword}")`;
     const insertResponse = await pool.query(queryString);
+    console.log(insertResponse);
+
+    if ("insertId" in insertResponse[0]) {
+      const createInitialTabQuery = `insert into tab(name, user_row_id_from_tab) values("새 탭", "${insertResponse[0].insertId}")`;
+      await pool.query(createInitialTabQuery);
+    }
+
     res.status(201).send("ok");
   } catch (err) {
     if (err instanceof Error) {

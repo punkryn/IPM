@@ -17,7 +17,8 @@ export default () => {
   passport.deserializeUser(async (id, done) => {
     try {
       const user = await pool.query(
-        `select id, nickname, email from users where id = "${id}"`
+        // `select id, nickname, email from users where id = "${id}"`
+        `select users.id, nickname, email, tab.id as tab_id, name from users join tab on users.id = tab.user_row_id_from_tab where users.id = "${id}"`
       );
 
       if (Array.isArray(user[0]) && !user[0].length) {

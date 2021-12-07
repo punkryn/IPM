@@ -6,7 +6,24 @@ import { isLoggedIn, isNotLoggedIn } from "./middlewares";
 
 const router = express.Router();
 
+router.get("/main/tab/:nickname", async (req, res, next) => {
+  try {
+    const param = req.params.nickname;
+    // console.log(param);
+    const queryString = `select tab.id as tab_id, tab.name as tab_name, information.userEmail, information.hint, information.host from users join tab on users.id = tab.user_row_id_from_tab join information on tab.id = information.tab_row_id where users.nickname = '${param}'`;
+    const response = await pool.query(queryString);
+    // console.log(response);
+    if (Array.isArray(response[0])) {
+      // console.log(response[0]);
+      res.status(200).json(response[0]);
+    }
+  } catch (err: any) {
+    console.log(err.message);
+  }
+});
+
 router.get("/users", (req, res, next) => {
+  console.log(req.user);
   return res.json(req.user || false);
 });
 

@@ -5,9 +5,10 @@ import useInput from '@hooks/useInput';
 import { Link, Navigate } from 'react-router-dom';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
+import { IUser } from '@typings/db';
 
 const LogIn = () => {
-  const { data, error, mutate } = useSWR('/api/users', fetcher, {
+  const { data, error, mutate } = useSWR<IUser | false>('/api/users', fetcher, {
     dedupingInterval: 100000,
   });
   const [email, onChangeEmail] = useInput('');
@@ -36,7 +37,7 @@ const LogIn = () => {
 
   if (data) {
     console.log('redirect');
-    return <Navigate to="/main" />;
+    return <Navigate to={`/main/tab/${data.nickname}`} />;
   }
 
   return (

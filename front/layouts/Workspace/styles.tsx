@@ -169,17 +169,6 @@ export const Chats = styled.div`
   overflow-y: hidden;
 `;
 
-export const AddButton = styled.button`
-  color: white;
-  font-size: 24px;
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-`;
-
 export const WorkspaceButton = styled.button`
   display: inline-block;
   width: 40px;

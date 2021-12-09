@@ -37,7 +37,8 @@ const LogIn = () => {
 
   if (data) {
     console.log('redirect');
-    return <Navigate to={`/main/tab/${data.nickname}`} />;
+    // return <Navigate to={`/main/tab/${data.nickname}`} />;
+    return <Navigate to={`/${data.nickname}`} />;
   }
 
   return (

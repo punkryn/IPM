@@ -1,4 +1,5 @@
 import useInput from '@hooks/useInput';
+import { IUser } from '@typings/db';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import React, { useCallback, useState, VFC } from 'react';
@@ -7,7 +8,7 @@ import useSWR from 'swr';
 import { Form, Success, Error, Label, Input, LinkContainer, Button, Header } from './styles';
 
 const SignUp = () => {
-  const { data, error, mutate } = useSWR('/api/users', fetcher);
+  const { data, error, mutate } = useSWR<IUser | false>('/api/users', fetcher);
   const [email, onChangeEmail] = useInput('');
   const [nickname, onChangeNickname] = useInput('');
   const [password, , setPassword] = useInput('');
@@ -65,7 +66,8 @@ const SignUp = () => {
 
   if (data) {
     console.log('redirect');
-    return <Navigate to="/main" />;
+    // return <Navigate to={`/main/tab/${data.nickname}`} />;
+    return <Navigate to={`/${data.nickname}`} />;
   }
 
   return (

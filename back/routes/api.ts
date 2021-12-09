@@ -1,4 +1,4 @@
-import express from "express";
+import express, { query } from "express";
 import pool from "../pool";
 import bcrpyt from "bcrypt";
 import passport from "passport";
@@ -6,24 +6,50 @@ import { isLoggedIn, isNotLoggedIn } from "./middlewares";
 
 const router = express.Router();
 
-router.get("/main/tab/:nickname", async (req, res, next) => {
+router.delete("/tab/:id", isLoggedIn, async (req, res, next) => {
+  const param = req.params;
   try {
-    const param = req.params.nickname;
+    const queryString = `delete from tab where id = ${param.id}`;
+    await pool.query(queryString);
+    res.send("ok");
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
+router.post("/tab", isLoggedIn, async (req, res, next) => {
+  const body = req.body;
+  try {
+    console.log(body);
+    const queryString = `insert into tab(name, user_row_id_from_tab) values("새 탭", ${body.id})`;
+    await pool.query(queryString);
+    res.status(201).send("ok");
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
+router.get("/tab/:nickname", isLoggedIn, async (req, res, next) => {
+  try {
+    const param = req.params;
     // console.log(param);
-    const queryString = `select tab.id as tab_id, tab.name as tab_name, information.userEmail, information.hint, information.host from users join tab on users.id = tab.user_row_id_from_tab join information on tab.id = information.tab_row_id where users.nickname = '${param}'`;
+    const queryString = `select tab.id as tab_id, tab.name as tab_name, information.userEmail, information.hint, information.host from users join tab on users.id = tab.user_row_id_from_tab join information on tab.id = information.tab_row_id where users.nickname = '${param.nickname}'`;
     const response = await pool.query(queryString);
     // console.log(response);
     if (Array.isArray(response[0])) {
-      // console.log(response[0]);
+      console.log(response[0]);
       res.status(200).json(response[0]);
     }
   } catch (err: any) {
     console.log(err.message);
+    next(err);
   }
 });
 
 router.get("/users", (req, res, next) => {
-  console.log(req.user);
+  // console.log(req.user);
   return res.json(req.user || false);
 });
 

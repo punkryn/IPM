@@ -10,6 +10,7 @@ import { Tab } from './styles';
 import Tabnav from '@components/Tabnav';
 import Tabcontent from '@components/Tabcontent';
 import tabFetcher from '@utils/tabFetcher';
+import PushButton from '@components/PushButton';
 
 const List = () => {
   const { data: userData, error, mutate } = useSWR<IUser | false>('/api/users', fetcher);
@@ -20,6 +21,7 @@ const List = () => {
     mutate: tabMutate,
   } = useSWR<IInfo[] | false | void>(userData ? `/api/tab/${nickname}` : null, tabFetcher);
   const [currentTab, setCurrentTab] = useState(0);
+  const [tabNow, setTabNow] = useState(0);
 
   useEffect(() => {
     if (tabInfo) {
@@ -36,7 +38,7 @@ const List = () => {
   const onChangeTab = useCallback(
     (e) => {
       if (typeof userData !== 'boolean') {
-        setCurrentTab(Number(userData?.tabs[Number(e.target.id)].tab_id));
+        setTabNow(Number(userData?.tabs[Number(e.target.id)].tab_id));
       }
     },
     [userData],
@@ -54,8 +56,10 @@ const List = () => {
   return (
     <Workspace>
       <Tab>
-        <Tabnav currentTab={currentTab} onChangeTab={onChangeTab} />
-        <Tabcontent currentTab={currentTab} onChangeTab={onChangeTab} />
+        <Tabnav currentTab={currentTab} tabNow={tabNow} onChangeTab={onChangeTab} />
+        <Tabcontent currentTab={currentTab} tabNow={tabNow} onChangeTab={onChangeTab}>
+          <PushButton currentTab={currentTab} tabNow={tabNow} />
+        </Tabcontent>
       </Tab>
     </Workspace>
   );

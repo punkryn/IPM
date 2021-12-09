@@ -12,9 +12,10 @@ import { AddButton, Nav, Remove } from './styles';
 interface Props {
   currentTab: number;
   onChangeTab: (e: any) => void;
+  tabNow: number;
 }
 
-const Tabnav: VFC<Props> = ({ currentTab, onChangeTab }) => {
+const Tabnav: VFC<Props> = ({ currentTab, onChangeTab, tabNow }) => {
   const { data: userData, error, mutate } = useSWR<IUser | false>('/api/users', fetcher);
   const { nickname } = useParams();
   // const { data: tabInfo } = useSWR(userData ? `/api/tab/${nickname}` : null, tabFetcher);

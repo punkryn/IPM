@@ -48,6 +48,19 @@ router.get("/tab/:nickname", isLoggedIn, async (req, res, next) => {
   }
 });
 
+router.post("/tab/:tab", isLoggedIn, async (req, res, next) => {
+  const params = req.params;
+  const body = req.body;
+  try {
+    const queryString = `insert into information(userEmail, userPassword, hint, host, tab_row_id) values('${body.id}', '${body.pwd}', '${body.hint}', '${body.host}', ${params.tab})`;
+    await pool.query(queryString);
+    res.send("ok");
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
 router.get("/users", (req, res, next) => {
   // console.log(req.user);
   return res.json(req.user || false);

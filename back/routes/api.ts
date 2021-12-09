@@ -35,11 +35,11 @@ router.get("/tab/:nickname", isLoggedIn, async (req, res, next) => {
   try {
     const param = req.params;
     // console.log(param);
-    const queryString = `select tab.id as tab_id, tab.name as tab_name, information.userEmail, information.hint, information.host from users join tab on users.id = tab.user_row_id_from_tab join information on tab.id = information.tab_row_id where users.nickname = '${param.nickname}'`;
+    const queryString = `select information.id as info_id, tab.id as tab_id, tab.name as tab_name, information.userEmail, information.hint, information.host from users join tab on users.id = tab.user_row_id_from_tab join information on tab.id = information.tab_row_id where users.nickname = '${param.nickname}'`;
     const response = await pool.query(queryString);
     // console.log(response);
     if (Array.isArray(response[0])) {
-      console.log(response[0]);
+      // console.log(response[0]);
       res.status(200).json(response[0]);
     }
   } catch (err: any) {
@@ -53,6 +53,18 @@ router.post("/tab/:tab", isLoggedIn, async (req, res, next) => {
   const body = req.body;
   try {
     const queryString = `insert into information(userEmail, userPassword, hint, host, tab_row_id) values('${body.id}', '${body.pwd}', '${body.hint}', '${body.host}', ${params.tab})`;
+    await pool.query(queryString);
+    res.send("ok");
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
+router.delete("/tab/info/:id", isLoggedIn, async (req, res, next) => {
+  const params = req.params;
+  try {
+    const queryString = `delete from information where id = ${params.id}`;
     await pool.query(queryString);
     res.send("ok");
   } catch (err) {

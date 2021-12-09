@@ -10,7 +10,7 @@ export const CircleButton = styled.button<{ open: boolean }>`
     background: #20c997;
   }
 
-  position: absolute;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,7 +19,7 @@ export const CircleButton = styled.button<{ open: boolean }>`
   border: none;
   outline: none;
   left: 50%;
-  bottom: 0%;
+  bottom: 5%;
 
   color: white;
   width: 80px;
@@ -48,16 +48,16 @@ export const CircleButton = styled.button<{ open: boolean }>`
 export const InsertFormPositioner = styled.div`
   width: 100%;
   bottom: 0;
-  left: 0;
-  position: absolute;
+  right: 0;
+  position: relative;
 `;
 
 export const InsertForm = styled.form`
   background: #f8f9fa;
   padding-left: 32px;
-  padding-top: 32px;
+  padding-top: 16px;
   padding-right: 32px;
-  padding-bottom: 72px;
+  padding-bottom: 32px;
 
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
@@ -72,4 +72,5 @@ export const Input = styled.input`
   outline: none;
   font-size: 18px;
   box-sizing: border-box;
+  margin-bottom: 10px;
 `;

@@ -92,19 +92,23 @@ const PushButton: VFC<Props> = ({ currentTab, tabNow }) => {
       {open && (
         <InsertFormPositioner>
           <InsertForm onKeyPress={onKeyPress}>
+            HOST{' '}
             <Input autoFocus placeholder="계정의 사용처를 입력하세요." onChange={onChange} value={host} id="host" />
+            ID{' '}
             <Input
               placeholder="로그인에 필요한 이메일 또는 아이디를 입력하세요."
               onChange={onChange}
               value={id}
               id="id"
             />
+            HINT{' '}
             <Input
               placeholder="로그인에 필요한 비밀번호의 힌트를 입력하세요."
               onChange={onChange}
               value={hint}
               id="hint"
             />
+            PASSWORD{' '}
             <Input placeholder="로그인에 필요한 비밀번호를 입력하세요." onChange={onChange} value={pwd} id="pwd" />
           </InsertForm>
         </InsertFormPositioner>

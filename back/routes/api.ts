@@ -48,6 +48,23 @@ router.get("/tab/info/:nickname", isLoggedIn, async (req, res, next) => {
   }
 });
 
+router.get("/tabs/info/:nickname", isLoggedIn, async (req, res, next) => {
+  try {
+    const param = req.params;
+    // console.log(param);
+    const queryString = `select tab.id as tab_id, tab.name as tab_name, from users join tab on users.id = tab.user_row_id_from_tab where users.nickname = '${param.nickname}'`;
+    const response = await pool.query(queryString);
+    // console.log(response);
+    if (Array.isArray(response[0])) {
+      // console.log(response[0]);
+      res.status(200).json(response[0]);
+    }
+  } catch (err: any) {
+    console.log(err.message);
+    next(err);
+  }
+});
+
 router.get("/tab/:nickname", isLoggedIn, async (req, res, next) => {
   try {
     const params = req.params;

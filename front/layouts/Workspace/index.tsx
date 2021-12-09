@@ -19,6 +19,7 @@ import {
 import gravatar from 'gravatar';
 import Menu from '@components/Menu';
 import { IUser } from '@typings/db';
+import HostList from '@components/HostList';
 
 const Workspace: FC = ({ children }) => {
   const { data: userData, error, mutate } = useSWR<IUser | false>('/api/users', fetcher);
@@ -80,7 +81,9 @@ const Workspace: FC = ({ children }) => {
         {/* <Workspaces>test</Workspaces> */}
         <Channels>
           <WorkspaceName>IPM</WorkspaceName>
-          <MenuScroll>menu scroll</MenuScroll>
+          <MenuScroll>
+            <HostList />
+          </MenuScroll>
         </Channels>
         <Chats>{children}</Chats>
       </WorkspaceWrapper>

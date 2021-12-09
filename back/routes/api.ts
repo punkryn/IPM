@@ -31,7 +31,7 @@ router.post("/tab", isLoggedIn, async (req, res, next) => {
   }
 });
 
-router.get("/tab/:nickname", isLoggedIn, async (req, res, next) => {
+router.get("/tab/info/:nickname", isLoggedIn, async (req, res, next) => {
   try {
     const param = req.params;
     // console.log(param);
@@ -44,6 +44,19 @@ router.get("/tab/:nickname", isLoggedIn, async (req, res, next) => {
     }
   } catch (err: any) {
     console.log(err.message);
+    next(err);
+  }
+});
+
+router.get("/tab/:nickname", isLoggedIn, async (req, res, next) => {
+  try {
+    const params = req.params;
+    const queryString = `select min(tab.id) as minId from users join tab on users.id = tab.user_row_id_from_tab where users.nickname = '${params.nickname}'`;
+    const response = await pool.query(queryString);
+    console.log(response[0]);
+    res.json(response[0]);
+  } catch (err) {
+    console.log(err);
     next(err);
   }
 });

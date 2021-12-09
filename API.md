@@ -32,6 +32,11 @@ HTTP 요청 리스트(ajax)
 
 ### GET /tab/:nickname
 
+- :nickname으로 로그인 한 유저의 탭 중 id가 가장 낮은 탭의 id를 가져옴
+- return [{minId: number}]
+
+### GET /tab/info/:nickname
+
 - :nickname으로 로그인 한 유저의 탭에 있는 모든 데이터 가져옴
 - return IInfo[]
 

@@ -21,7 +21,7 @@ const Tabcontent: FC<Props> = ({ currentTab, onChangeTab, children, tabNow }) =>
     data: tabInfo,
     error: tabError,
     mutate: tabMutate,
-  } = useSWR<IInfo[] | false | void>(userData ? `/api/tab/${nickname}` : null, tabFetcher);
+  } = useSWR<IInfo[] | false | void>(userData ? `/api/tab/info/${nickname}` : null, tabFetcher);
   const [info, setInfo] = useState([
     {
       info_id: 0,

@@ -19,21 +19,29 @@ const List = () => {
     data: tabInfo,
     error: tabError,
     mutate: tabMutate,
-  } = useSWR<IInfo[] | false | void>(userData ? `/api/tab/${nickname}` : null, tabFetcher);
+  } = useSWR<IInfo[] | false | void>(userData ? `/api/tab/info/${nickname}` : null, tabFetcher);
   const [currentTab, setCurrentTab] = useState(0);
   const [tabNow, setTabNow] = useState(0);
 
   useEffect(() => {
-    if (tabInfo) {
+    if (tabInfo && tabInfo.length > 0) {
       let minId = 1e9;
       tabInfo.forEach((item) => {
         if (item.tab_id < minId) {
           minId = item.tab_id;
         }
       });
+
       setCurrentTab(minId);
     }
   }, [tabInfo]);
+
+  useEffect(() => {
+    axios.get(`/api/tab/${nickname}`).then((response) => {
+      console.log(response.data);
+      setCurrentTab(response.data[0].minId);
+    });
+  }, []);
 
   const onChangeTab = useCallback(
     (e) => {

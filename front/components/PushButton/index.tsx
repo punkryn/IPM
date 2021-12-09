@@ -21,7 +21,7 @@ const PushButton: VFC<Props> = ({ currentTab, tabNow }) => {
     data: tabInfo,
     error: tabError,
     mutate: tabMutate,
-  } = useSWR<IInfo[] | false | void>(userData ? `/api/tab/${nickname}` : null, tabFetcher);
+  } = useSWR<IInfo[] | false | void>(userData ? `/api/tab/info/${nickname}` : null, tabFetcher);
 
   const [open, setOpen] = useState(false);
   const [host, setHost] = useState('');

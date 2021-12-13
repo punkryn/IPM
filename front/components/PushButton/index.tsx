@@ -1,4 +1,4 @@
-import { IInfo, IUser } from '@typings/db';
+import { IInfo, ITabInfo, IUser } from '@typings/db';
 import fetcher from '@utils/fetcher';
 import tabFetcher from '@utils/tabFetcher';
 import axios from 'axios';
@@ -23,12 +23,20 @@ const PushButton: VFC<Props> = ({ currentTab, tabNow }) => {
     mutate: tabMutate,
   } = useSWR<IInfo[] | false | void>(userData ? `/api/tab/info/${nickname}` : null, tabFetcher);
 
+  const {
+    data: tabsInfo,
+    error: tabsError,
+    mutate: tabsMutate,
+  } = useSWR<ITabInfo[] | void | false>(userData ? `/api/tabs/info/${nickname}` : null, tabFetcher);
+
   const [open, setOpen] = useState(false);
   const [host, setHost] = useState('');
   const [id, setId] = useState('');
   const [hint, setHint] = useState('');
   const [pwd, setPwd] = useState('');
   const onToggle = () => setOpen((prev) => !prev);
+
+  console.log('tabnow', tabNow);
 
   const onChange = useCallback((e) => {
     switch (e.target.id) {
@@ -57,7 +65,8 @@ const PushButton: VFC<Props> = ({ currentTab, tabNow }) => {
       setId('');
       setHint('');
       setPwd('');
-      const tabNum = tabNow === 0 ? currentTab : tabNow;
+      const tabNum = tabNow === 0 || !tabNow ? currentTab : tabNow;
+      console.log(tabNow, currentTab);
 
       axios
         .post(`/api/tab/${tabNum}`, {
@@ -67,7 +76,9 @@ const PushButton: VFC<Props> = ({ currentTab, tabNow }) => {
           pwd,
         })
         .then((response) => {
+          mutate();
           tabMutate();
+          tabsMutate();
         })
         .catch((err) => {
           console.log(err);

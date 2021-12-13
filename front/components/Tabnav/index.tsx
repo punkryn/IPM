@@ -1,4 +1,4 @@
-import { IUser } from '@typings/db';
+import { IInfo, ITabInfo, IUser } from '@typings/db';
 import fetcher from '@utils/fetcher';
 import tabFetcher from '@utils/tabFetcher';
 import axios from 'axios';
@@ -18,7 +18,16 @@ interface Props {
 const Tabnav: VFC<Props> = ({ currentTab, onChangeTab, tabNow }) => {
   const { data: userData, error, mutate } = useSWR<IUser | false>('/api/users', fetcher);
   const { nickname } = useParams();
-  // const { data: tabInfo } = useSWR(userData ? `/api/tab/${nickname}` : null, tabFetcher);
+  const {
+    data: tabInfo,
+    error: tabError,
+    mutate: tabMutate,
+  } = useSWR<IInfo[] | void | false>(userData ? `/api/tab/info/${nickname}` : null, tabFetcher);
+  const {
+    data: tabsInfo,
+    error: tabsError,
+    mutate: tabsMutate,
+  } = useSWR<ITabInfo[] | void | false>(userData ? `/api/tabs/info/${nickname}` : null, tabFetcher);
 
   const onCreateNewTab = useCallback(
     (e) => {
@@ -31,6 +40,8 @@ const Tabnav: VFC<Props> = ({ currentTab, onChangeTab, tabNow }) => {
         })
         .then((response) => {
           mutate();
+          tabMutate();
+          tabsMutate();
         })
         .catch((err) => {
           console.log(err);
@@ -52,6 +63,8 @@ const Tabnav: VFC<Props> = ({ currentTab, onChangeTab, tabNow }) => {
           .delete(`/api/tab/${userData.tabs[index].tab_id}`)
           .then((response) => {
             mutate();
+            tabsMutate();
+            tabMutate();
           })
           .catch((err) => {
             console.log(err);
@@ -61,17 +74,22 @@ const Tabnav: VFC<Props> = ({ currentTab, onChangeTab, tabNow }) => {
     [userData],
   );
 
-  const onActive = useCallback((e) => {
-    if (e.target.className === 'active') {
-    } else {
-      onChangeTab(e);
-      const lis = e.target.parentElement.children;
-      for (let i = 0; i < lis.length - 1; i++) {
-        lis[i].className = '';
+  const onActive = useCallback(
+    (e) => {
+      if (e.target.className === 'active') {
+      } else {
+        onChangeTab(e);
+        console.log('target', e.target);
+        console.log('userdtaa', userData);
+        const lis = e.target.parentElement.children;
+        for (let i = 0; i < lis.length - 1; i++) {
+          lis[i].className = '';
+        }
+        e.target.className = 'active';
       }
-      e.target.className = 'active';
-    }
-  }, []);
+    },
+    [userData],
+  );
 
   if (userData === undefined) {
     return <div>loading...</div>;

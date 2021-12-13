@@ -1,4 +1,4 @@
-import { IInfo, IUser } from '@typings/db';
+import { IInfo, ITabInfo, IUser } from '@typings/db';
 import fetcher from '@utils/fetcher';
 import tabFetcher from '@utils/tabFetcher';
 import axios from 'axios';
@@ -22,6 +22,11 @@ const Tabcontent: FC<Props> = ({ currentTab, onChangeTab, children, tabNow }) =>
     error: tabError,
     mutate: tabMutate,
   } = useSWR<IInfo[] | false | void>(userData ? `/api/tab/info/${nickname}` : null, tabFetcher);
+  const {
+    data: tabsInfo,
+    error: tabsError,
+    mutate: tabsMutate,
+  } = useSWR<ITabInfo[] | void | false>(userData ? `/api/tabs/info/${nickname}` : null, tabFetcher);
   const [info, setInfo] = useState([
     {
       info_id: 0,
@@ -41,13 +46,14 @@ const Tabcontent: FC<Props> = ({ currentTab, onChangeTab, children, tabNow }) =>
         setInfo(tabInfo.filter((item) => item.tab_id === tabNow));
       }
     }
-  }, [currentTab, tabInfo, tabNow]);
+  }, [currentTab, tabInfo, tabNow, tabsInfo]);
 
   const onRemove = useCallback((info_id) => {
     axios
       .delete(`/api/tab/info/${info_id}`)
       .then((response) => {
         tabMutate();
+        tabsMutate();
       })
       .catch((err) => {
         console.log(err);

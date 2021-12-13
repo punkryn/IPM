@@ -46,7 +46,9 @@ const List = () => {
   const onChangeTab = useCallback(
     (e) => {
       if (typeof userData !== 'boolean') {
-        setTabNow(Number(userData?.tabs[Number(e.target.id)].tab_id));
+        mutate();
+        console.log('userData', userData);
+        setTabNow(Number(userData?.tabs[Number(e.target.id)]?.tab_id));
       }
     },
     [userData],

@@ -21,7 +21,7 @@ router.delete("/tab/:id", isLoggedIn, async (req, res, next) => {
 router.post("/tab", isLoggedIn, async (req, res, next) => {
   const body = req.body;
   try {
-    console.log(body);
+    // console.log(body);
     const queryString = `insert into tab(name, user_row_id_from_tab) values("새 탭", ${body.id})`;
     await pool.query(queryString);
     res.status(201).send("ok");
@@ -52,11 +52,9 @@ router.get("/tabs/info/:nickname", isLoggedIn, async (req, res, next) => {
   try {
     const param = req.params;
     // console.log(param);
-    const queryString = `select tab.id as tab_id, tab.name as tab_name, from users join tab on users.id = tab.user_row_id_from_tab where users.nickname = '${param.nickname}'`;
+    const queryString = `select tab.id as tab_id, tab.name as tab_name from users join tab on users.id = tab.user_row_id_from_tab where users.nickname = '${param.nickname}'`;
     const response = await pool.query(queryString);
-    // console.log(response);
     if (Array.isArray(response[0])) {
-      // console.log(response[0]);
       res.status(200).json(response[0]);
     }
   } catch (err: any) {
@@ -70,7 +68,7 @@ router.get("/tab/:nickname", isLoggedIn, async (req, res, next) => {
     const params = req.params;
     const queryString = `select min(tab.id) as minId from users join tab on users.id = tab.user_row_id_from_tab where users.nickname = '${params.nickname}'`;
     const response = await pool.query(queryString);
-    console.log(response[0]);
+    // console.log(response[0]);
     res.json(response[0]);
   } catch (err) {
     console.log(err);
@@ -111,7 +109,7 @@ router.get("/users", (req, res, next) => {
 router.post("/users", isNotLoggedIn, async (req, res, next) => {
   const body = req.body;
   try {
-    console.log(body);
+    // console.log(body);
     const response = await pool.query(
       `select * from users where email = '${body.email}'`
     );
@@ -123,7 +121,7 @@ router.post("/users", isNotLoggedIn, async (req, res, next) => {
     const hashedPassword = await bcrpyt.hash(body.password, 12);
     const queryString = `insert into users(email, nickname, password) values("${body.email}", "${body.nickname}", "${hashedPassword}")`;
     const insertResponse = await pool.query(queryString);
-    console.log(insertResponse);
+    // console.log(insertResponse);
 
     if ("insertId" in insertResponse[0]) {
       const createInitialTabQuery = `insert into tab(name, user_row_id_from_tab) values("새 탭", "${insertResponse[0].insertId}")`;

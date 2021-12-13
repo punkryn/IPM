@@ -1,7 +1,7 @@
 import { IInfo, ITabInfo, IUser } from '@typings/db';
 import fetcher from '@utils/fetcher';
 import tabFetcher from '@utils/tabFetcher';
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import useSWR from 'swr';
@@ -19,18 +19,30 @@ const HostList: FC = () => {
   });
   const { data: tabInfo } = useSWR<IInfo[] | void | false>(userData ? `/api/tab/info/${nickname}` : null, tabFetcher);
   const { data: tabsInfo } = useSWR<ITabInfo[] | void | false>(
-    userData ? `/api/tabas/info/${nickname}` : null,
+    userData ? `/api/tabs/info/${nickname}` : null,
     tabFetcher,
   );
-  const [tabCollapse, setTabCollapse] = useState(false);
+  // const [tabCollapse, setTabCollapse] = useState(false);
+  const [tabCollapse, setTabCollapse] = useState<boolean[]>([]);
 
-  console.log(tabsInfo); // <<< 여기부터
-  const toggleChannelCollapse = useCallback(() => {
-    setTabCollapse((prev) => !prev);
-  }, []);
+  useEffect(() => {
+    for (let i = 0; tabsInfo && i < tabsInfo?.length; i++) {
+      setTabCollapse((prev) => [...prev, false]);
+    }
+    // setTabCollapse(tabCollapse);
+    // console.log(tabCollapse);
+  }, [tabsInfo]);
 
+  const toggleChannelCollapse = useCallback(
+    (index) => {
+      setTabCollapse(tabCollapse.map((item, idx) => (index === idx ? !item : item)));
+      console.log(tabCollapse);
+    },
+    [tabCollapse],
+  );
+
+  console.log('tabInfo', tabInfo);
   if (!tabInfo || !userData || !tabsInfo) {
-    console.log(tabInfo);
     return null;
   }
 
@@ -38,9 +50,14 @@ const HostList: FC = () => {
     <>
       {tabsInfo?.map((item, index) => {
         return (
-          <>
+          <div key={index}>
             <h2>
-              <CollapseButton collapse={tabCollapse} onClick={toggleChannelCollapse}>
+              <CollapseButton
+                collapse={tabCollapse[index]}
+                onClick={() => {
+                  toggleChannelCollapse(index);
+                }}
+              >
                 <i
                   className="c-icon p-channel_sidebar__section_heading_expand p-channel_sidebar__section_heading_expand--show_more_feature c-icon--caret-right c-icon--inherit c-icon--inline"
                   data-qa="channel-section-collapse"
@@ -50,19 +67,19 @@ const HostList: FC = () => {
               <span>{item.tab_name}</span>
             </h2>
             <div>
-              {!tabCollapse &&
+              {!tabCollapse[index] &&
                 tabInfo?.map((item2, index) => {
-                  if (item.tab_name === item2.tab_name) {
+                  if (item.tab_id === item2.tab_id) {
                     return (
                       // <div key={index}>{item.host}</div>
-                      <NavLink key={item2.tab_id} to={`/${userData?.nickname}`}>
+                      <NavLink key={item2.info_id} to={`/${userData?.nickname}`}>
                         <span>{item2.host}</span>
                       </NavLink>
                     );
                   }
                 })}
             </div>
-          </>
+          </div>
         );
       })}
     </>

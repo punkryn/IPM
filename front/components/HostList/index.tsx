@@ -22,13 +22,17 @@ const HostList: FC = () => {
     userData ? `/api/tabs/info/${nickname}` : null,
     tabFetcher,
   );
-  // const [tabCollapse, setTabCollapse] = useState(false);
   const [tabCollapse, setTabCollapse] = useState<boolean[]>([]);
 
   useEffect(() => {
-    for (let i = 0; tabsInfo && i < tabsInfo?.length; i++) {
+    if (tabCollapse.length === 0) {
+      for (let i = 0; tabsInfo && i < tabsInfo?.length; i++) {
+        setTabCollapse((prev) => [...prev, false]);
+      }
+    } else {
       setTabCollapse((prev) => [...prev, false]);
     }
+
     // setTabCollapse(tabCollapse);
     // console.log(tabCollapse);
   }, [tabsInfo]);
@@ -36,12 +40,10 @@ const HostList: FC = () => {
   const toggleChannelCollapse = useCallback(
     (index) => {
       setTabCollapse(tabCollapse.map((item, idx) => (index === idx ? !item : item)));
-      console.log(tabCollapse);
     },
     [tabCollapse],
   );
 
-  console.log('tabInfo', tabInfo);
   if (!tabInfo || !userData || !tabsInfo) {
     return null;
   }

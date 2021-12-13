@@ -2,11 +2,12 @@ import { IInfo, ITabInfo, IUser } from '@typings/db';
 import fetcher from '@utils/fetcher';
 import tabFetcher from '@utils/tabFetcher';
 import axios from 'axios';
-import React, { VFC } from 'react';
+import React, { useEffect, useState, VFC } from 'react';
 import { useCallback } from 'react';
 import { MdDelete } from 'react-icons/md';
 import { Navigate, useParams } from 'react-router';
 import useSWR from 'swr';
+import { isFunctionDeclaration } from 'typescript';
 import { AddButton, Nav, Remove } from './styles';
 
 interface Props {
@@ -28,6 +29,17 @@ const Tabnav: VFC<Props> = ({ currentTab, onChangeTab, tabNow }) => {
     error: tabsError,
     mutate: tabsMutate,
   } = useSWR<ITabInfo[] | void | false>(userData ? `/api/tabs/info/${nickname}` : null, tabFetcher);
+
+  const [inputFlag, setInputFlag] = useState<boolean[]>([]);
+  const [tabName, setTabName] = useState('');
+
+  useEffect(() => {
+    if (userData && inputFlag.length === 0) {
+      for (let i = 0; i < userData?.tabs.length; i++) {
+        setInputFlag((prev) => [...prev, false]);
+      }
+    }
+  }, []);
 
   const onCreateNewTab = useCallback(
     (e) => {
@@ -77,6 +89,8 @@ const Tabnav: VFC<Props> = ({ currentTab, onChangeTab, tabNow }) => {
   const onActive = useCallback(
     (e) => {
       if (e.target.className === 'active') {
+        console.log(inputFlag);
+        setTabName(e.target.innerText); // <<< 여기서 시작
       } else {
         onChangeTab(e);
         console.log('target', e.target);
@@ -88,7 +102,7 @@ const Tabnav: VFC<Props> = ({ currentTab, onChangeTab, tabNow }) => {
         e.target.className = 'active';
       }
     },
-    [userData],
+    [userData, inputFlag],
   );
 
   if (userData === undefined) {
@@ -103,7 +117,7 @@ const Tabnav: VFC<Props> = ({ currentTab, onChangeTab, tabNow }) => {
   return (
     <Nav>
       {userData.tabs.map((item, index) => {
-        if (index === 0) {
+        if (!inputFlag[index] && index === 0) {
           return (
             <li key={index} className="active" onClick={onActive} id={String(index)}>
               {item.name}
@@ -112,15 +126,18 @@ const Tabnav: VFC<Props> = ({ currentTab, onChangeTab, tabNow }) => {
               </Remove>
             </li>
           );
+        } else if (!inputFlag[index]) {
+          return (
+            <li key={index} onClick={onActive} id={String(index)}>
+              {item.name}
+              <Remove onClick={onRemove}>
+                <MdDelete />
+              </Remove>
+            </li>
+          );
+        } else if (inputFlag[index]) {
+          return <input autoFocus value={tabName} />;
         }
-        return (
-          <li key={index} onClick={onActive} id={String(index)}>
-            {item.name}
-            <Remove onClick={onRemove}>
-              <MdDelete />
-            </Remove>
-          </li>
-        );
       })}
       <AddButton onClick={onCreateNewTab}>+</AddButton>
     </Nav>

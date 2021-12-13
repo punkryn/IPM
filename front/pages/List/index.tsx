@@ -22,6 +22,7 @@ const List = () => {
   } = useSWR<IInfo[] | false | void>(userData ? `/api/tab/info/${nickname}` : null, tabFetcher);
   const [currentTab, setCurrentTab] = useState(0);
   const [tabNow, setTabNow] = useState(0);
+  // const [tabCollapse, setTabCollapse] = useState<boolean[]>([]);
 
   useEffect(() => {
     if (tabInfo && tabInfo.length > 0) {
@@ -53,6 +54,19 @@ const List = () => {
     },
     [userData],
   );
+
+  // useEffect(() =>  {
+  //   if (tabCollapse.length === 0) {
+  //     for (let i = 0; tabsInfo && i < tabsInfo?.length; i++) {
+  //       setTabCollapse((prev) => [...prev, false]);
+  //     }
+  //   } else {
+  //     setTabCollapse((prev) => [...prev, false]);
+  //   }
+
+  //   // setTabCollapse(tabCollapse);
+  //   // console.log(tabCollapse);
+  // }, [tabsInfo]);
 
   if (userData === undefined) {
     return <div>loading...</div>;

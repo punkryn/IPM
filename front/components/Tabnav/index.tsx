@@ -41,6 +41,15 @@ const Tabnav: VFC<Props> = ({ currentTab, onChangeTab, tabNow }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (userData) {
+      setInputFlag([]);
+      for (let i = 0; i < userData?.tabs.length; i++) {
+        setInputFlag((prev) => [...prev, false]);
+      }
+    }
+  }, [userData]);
+
   const onCreateNewTab = useCallback(
     (e) => {
       if (typeof userData === 'boolean' || userData === undefined) {
@@ -91,6 +100,7 @@ const Tabnav: VFC<Props> = ({ currentTab, onChangeTab, tabNow }) => {
       if (e.target.className === 'active') {
         console.log(inputFlag);
         setTabName(e.target.innerText); // <<< 여기서 시작
+        setInputFlag(inputFlag.map((item, index) => (index === Number(e.target.id) ? !item : item)));
       } else {
         onChangeTab(e);
         console.log('target', e.target);
@@ -102,7 +112,35 @@ const Tabnav: VFC<Props> = ({ currentTab, onChangeTab, tabNow }) => {
         e.target.className = 'active';
       }
     },
-    [userData, inputFlag],
+    [userData, inputFlag, tabName],
+  );
+
+  const onChangeTabName = useCallback(
+    (e) => {
+      setTabName(e.target.value);
+    },
+    [tabName],
+  );
+
+  const onTabKeyPress = useCallback(
+    (e) => {
+      // console.log(e);
+      if (userData && (e.code === 'Enter' || e.code === 'NumpadEnter')) {
+        axios
+          .patch(`/api/tab/${userData?.tabs[e.target.id].tab_id}`, {
+            name: tabName,
+          })
+          .then((response) => {
+            mutate();
+            tabsMutate();
+            tabMutate();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    },
+    [tabName, userData],
   );
 
   if (userData === undefined) {
@@ -136,7 +174,16 @@ const Tabnav: VFC<Props> = ({ currentTab, onChangeTab, tabNow }) => {
             </li>
           );
         } else if (inputFlag[index]) {
-          return <input autoFocus value={tabName} />;
+          return (
+            <input
+              id={String(index)}
+              autoFocus
+              value={tabName}
+              onChange={onChangeTabName}
+              onKeyPress={onTabKeyPress}
+              key={index}
+            />
+          );
         }
       })}
       <AddButton onClick={onCreateNewTab}>+</AddButton>

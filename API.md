@@ -50,3 +50,9 @@ HTTP 요청 리스트(ajax)
 
 - :id인 탭 삭제
 - return: 'ok'
+
+### PATCH /tab/:id
+
+- :id인 탭 이름 변경
+- body: { name: string(탭 이름) }
+- return: 'ok'

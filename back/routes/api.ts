@@ -101,6 +101,19 @@ router.delete("/tab/info/:id", isLoggedIn, async (req, res, next) => {
   }
 });
 
+router.patch("/tab/:id", isLoggedIn, async (req, res, next) => {
+  const params = req.params;
+  const body = req.body;
+  try {
+    const queryString = `update tab set name = '${body.name}' where id = ${params.id}`;
+    await pool.query(queryString);
+    res.send("ok");
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
 router.get("/users", (req, res, next) => {
   // console.log(req.user);
   return res.json(req.user || false);

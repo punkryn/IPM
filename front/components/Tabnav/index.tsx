@@ -59,7 +59,6 @@ const Tabnav = () => {
 
   useEffect(() => {
     tmpMutate('headerRef', headerRef);
-    // console.log(headerRefData);
   }, [headerRef]);
 
   const onCreateNewTab = useCallback(

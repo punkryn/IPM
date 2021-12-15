@@ -25,7 +25,7 @@ const HostList: FC = () => {
   );
   const [tabCollapse, setTabCollapse] = useState<boolean[]>([]);
   const { data: tabIndex } = useSWR('tabIndex');
-  const { data: headerRefData, error: headerRefError, mutate: headerRefMutate } = useSWR('headerRef');
+  const { data: headerRefData } = useSWR('headerRef');
 
   useEffect(() => {
     if (tabCollapse.length === 0) {
@@ -35,9 +35,6 @@ const HostList: FC = () => {
     } else {
       setTabCollapse((prev) => [...prev, false]);
     }
-
-    // setTabCollapse(tabCollapse);
-    // console.log(tabCollapse);
   }, [tabsInfo]);
 
   const toggleChannelCollapse = useCallback(
@@ -49,7 +46,6 @@ const HostList: FC = () => {
 
   const onClickActive = useCallback(
     (e) => {
-      // console.log(typeof e.target.children[0].tabIndex);
       if (tabInfo && tabInfo !== undefined) {
         const idx = e.target.tagName === 'SPAN' ? e.target.tabIndex : e.target.children[0].tabIndex;
         const currentUl = headerRefData.current.children;

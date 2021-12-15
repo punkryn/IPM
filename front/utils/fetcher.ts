@@ -19,10 +19,10 @@ const fetcher = <Data>(url: string) => {
             };
           }),
         };
-        console.log(obj);
+        // console.log(obj);
         return obj;
       } else if (typeof response.data === 'boolean') {
-        console.log(typeof response.data);
+        // console.log(typeof response.data);
         return response.data;
       }
 

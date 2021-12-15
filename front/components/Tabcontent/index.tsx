@@ -30,34 +30,6 @@ const Tabcontent: FC = ({ children }) => {
 
   const { data: tabIndex } = useSWR('tabIndex');
 
-  // const [info, setInfo] = useState([
-  //   {
-  //     info_id: 0,
-  //     tab_id: 0,
-  //     tab_name: '',
-  //     userEmail: '',
-  //     hint: '',
-  //     host: '',
-  //   },
-  // ]);
-
-  useEffect(() => {
-    if (tabInfo !== undefined && tabInfo) {
-      // if (tabNow === 0) {
-      //   setInfo(tabInfo.filter((item) => item.tab_id === currentTab));
-      // } else {
-      //   setInfo(tabInfo.filter((item) => item.tab_id === tabNow));
-      // }
-      // console.log('td', tabIndex);
-      // if (tabIndex === 0) {
-      //   setInfo(tabInfo.filter((item) => item.tab_id === currentTab));
-      // } else {
-      // setInfo(tabInfo.filter((item) => item.tab_id === tabIndex));
-      // console.log(tabInfo);
-      // }
-    }
-  }, [tabInfo, tabIndex]);
-
   const onRemove = useCallback((info_id) => {
     axios
       .delete(`/api/tab/info/${info_id}`)

@@ -14,7 +14,7 @@ interface Props {
   tabNow: number;
 }
 
-const Tabcontent: FC<Props> = ({ currentTab, onChangeTab, children, tabNow }) => {
+const Tabcontent: FC = ({ children }) => {
   const { data: userData, error, mutate } = useSWR<IUser | false>('/api/users', fetcher);
   const { nickname } = useParams();
   const {
@@ -27,6 +27,9 @@ const Tabcontent: FC<Props> = ({ currentTab, onChangeTab, children, tabNow }) =>
     error: tabsError,
     mutate: tabsMutate,
   } = useSWR<ITabInfo[] | void | false>(userData ? `/api/tabs/info/${nickname}` : null, tabFetcher);
+
+  const { data: tabIndex } = useSWR('tabIndex');
+
   const [info, setInfo] = useState([
     {
       info_id: 0,
@@ -40,13 +43,19 @@ const Tabcontent: FC<Props> = ({ currentTab, onChangeTab, children, tabNow }) =>
 
   useEffect(() => {
     if (tabInfo !== undefined && tabInfo) {
-      if (tabNow === 0) {
-        setInfo(tabInfo.filter((item) => item.tab_id === currentTab));
-      } else {
-        setInfo(tabInfo.filter((item) => item.tab_id === tabNow));
-      }
+      // if (tabNow === 0) {
+      //   setInfo(tabInfo.filter((item) => item.tab_id === currentTab));
+      // } else {
+      //   setInfo(tabInfo.filter((item) => item.tab_id === tabNow));
+      // }
+      // console.log('td', tabIndex);
+      // if (tabIndex === 0) {
+      //   setInfo(tabInfo.filter((item) => item.tab_id === currentTab));
+      // } else {
+      setInfo(tabInfo.filter((item) => item.tab_id === tabIndex));
+      // }
     }
-  }, [currentTab, tabInfo, tabNow, tabsInfo]);
+  }, [tabInfo, tabIndex]);
 
   const onRemove = useCallback((info_id) => {
     axios

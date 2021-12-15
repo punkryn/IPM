@@ -6,7 +6,7 @@ import React, { useCallback, VFC } from 'react';
 import { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { useParams } from 'react-router';
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 import { CircleButton, Input, InsertForm, InsertFormPositioner } from './styles';
 
 interface Props {
@@ -14,7 +14,8 @@ interface Props {
   tabNow: number;
 }
 
-const PushButton: VFC<Props> = ({ currentTab, tabNow }) => {
+const PushButton = () => {
+  const { mutate: tmpMutate } = useSWRConfig();
   const { data: userData, error, mutate } = useSWR<IUser | false>('/api/users', fetcher);
   const { nickname } = useParams();
   const {
@@ -29,14 +30,14 @@ const PushButton: VFC<Props> = ({ currentTab, tabNow }) => {
     mutate: tabsMutate,
   } = useSWR<ITabInfo[] | void | false>(userData ? `/api/tabs/info/${nickname}` : null, tabFetcher);
 
+  const { data: tabIndex } = useSWR('tabIndex');
+
   const [open, setOpen] = useState(false);
   const [host, setHost] = useState('');
   const [id, setId] = useState('');
   const [hint, setHint] = useState('');
   const [pwd, setPwd] = useState('');
   const onToggle = () => setOpen((prev) => !prev);
-
-  console.log('tabnow', tabNow);
 
   const onChange = useCallback((e) => {
     switch (e.target.id) {
@@ -59,14 +60,13 @@ const PushButton: VFC<Props> = ({ currentTab, tabNow }) => {
 
   const onSubmit = useCallback(
     (e) => {
-      e.preventDefault();
+      // e.preventDefault();
 
       setHost('');
       setId('');
       setHint('');
       setPwd('');
-      const tabNum = tabNow === 0 || !tabNow ? currentTab : tabNow;
-      console.log(tabNow, currentTab);
+      const tabNum = tabIndex;
 
       axios
         .post(`/api/tab/${tabNum}`, {
@@ -86,7 +86,7 @@ const PushButton: VFC<Props> = ({ currentTab, tabNow }) => {
 
       setOpen(false);
     },
-    [host, id, hint, pwd, tabNow, currentTab],
+    [host, id, hint, pwd],
   );
 
   const onKeyPress = useCallback(
@@ -96,7 +96,7 @@ const PushButton: VFC<Props> = ({ currentTab, tabNow }) => {
       }
       onSubmit(e);
     },
-    [host, id, hint, pwd, tabNow, currentTab],
+    [host, id, hint, pwd],
   );
   return (
     <>

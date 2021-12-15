@@ -4,13 +4,14 @@ export const Remove = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #dee2e6;
+  // color: #dee2e6;
+  color: transparent;
   font-size: 24px;
   cursor: pointer;
-  &:hover {
-    color: #ff6b6b;
-  }
-  display: none;
+  // &:hover {
+  //   color: #ff6b6b;
+  // }
+  display: initial;
 `;
 
 export const Nav = styled.ul`
@@ -30,6 +31,10 @@ export const Nav = styled.ul`
   & li:hover {
     ${Remove} {
       display: initial;
+      color: #dee2e6;
+      &:hover {
+        color: #ff6b6b;
+      }
     }
   }
 

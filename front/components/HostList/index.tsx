@@ -4,10 +4,11 @@ import tabFetcher from '@utils/tabFetcher';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 import { CollapseButton } from './styles';
 
 const HostList: FC = () => {
+  const { mutate: tmpMutate } = useSWRConfig();
   const { nickname } = useParams();
   // const [socket] = useSocket(workspace);
   const {
@@ -23,6 +24,8 @@ const HostList: FC = () => {
     tabFetcher,
   );
   const [tabCollapse, setTabCollapse] = useState<boolean[]>([]);
+  const { data: tabIndex } = useSWR('tabIndex');
+  const { data: headerRefData, error: headerRefError, mutate: headerRefMutate } = useSWR('headerRef');
 
   useEffect(() => {
     if (tabCollapse.length === 0) {
@@ -42,6 +45,24 @@ const HostList: FC = () => {
       setTabCollapse(tabCollapse.map((item, idx) => (index === idx ? !item : item)));
     },
     [tabCollapse],
+  );
+
+  const onClickActive = useCallback(
+    (e) => {
+      if (tabInfo && tabInfo !== undefined) {
+        const currentUl = headerRefData.current.children;
+        for (let i = 0; i < currentUl.length - 1; i++) {
+          if (i === e.target.tabIndex) {
+            currentUl[i].className = 'active';
+          } else {
+            currentUl[i].className = '';
+          }
+        }
+
+        tmpMutate('tabIndex', Number(e.target.accessKey));
+      }
+    },
+    [headerRefData],
   );
 
   if (!tabInfo || !userData || !tabsInfo) {
@@ -70,13 +91,18 @@ const HostList: FC = () => {
             </h2>
             <div>
               {!tabCollapse[index] &&
-                tabInfo?.map((item2, index) => {
+                tabInfo?.map((item2, index2) => {
                   if (item.tab_id === item2.tab_id) {
                     return (
                       // <div key={index}>{item.host}</div>
-                      <NavLink key={item2.info_id} to={`/${userData?.nickname}`}>
-                        <span>{item2.host}</span>
-                      </NavLink>
+                      <a key={item2.info_id} onClick={onClickActive}>
+                        <span tabIndex={index} accessKey={String(item2.tab_id)}>
+                          {item2.host}
+                        </span>
+                      </a>
+                      /* <NavLink key={item2.info_id} to={`/${userData?.nickname}`}>
+                          <span>{item2.host}</span>
+                        </NavLink> */
                     );
                   }
                 })}

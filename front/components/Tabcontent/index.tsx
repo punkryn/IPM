@@ -6,7 +6,7 @@ import React, { FC, useCallback, useEffect, useState, VFC } from 'react';
 import { MdDelete } from 'react-icons/md';
 import { useParams } from 'react-router';
 import useSWR from 'swr';
-import { Content, Remove } from './styles';
+import { Content, DarkBackground, DialogBlock, Remove } from './styles';
 
 interface Props {
   currentTab: number;
@@ -29,16 +29,18 @@ const Tabcontent: FC = ({ children }) => {
   } = useSWR<ITabInfo[] | void | false>(userData ? `/api/tabs/info/${nickname}` : null, tabFetcher);
 
   const { data: tabIndex } = useSWR('tabIndex');
-  const [showPwd, setShowPwd] = useState<boolean[]>([]);
+  const [showPwd, setShowPwd] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (tabInfo) {
-      setShowPwd([]);
-      for (let i = 0; i < tabInfo.length; i++) {
-        setShowPwd((prev) => [...prev, false]);
-      }
-    }
-  }, [tabInfo, tabIndex]);
+  const [pwd, setPwd] = useState<string>('');
+
+  // useEffect(() => {
+  //   if (tabInfo) {
+  //     setShowPwd([]);
+  //     for (let i = 0; i < tabInfo.length; i++) {
+  //       setShowPwd((prev) => [...prev, false]);
+  //     }
+  //   }
+  // }, [tabInfo, tabIndex]);
 
   const onRemove = useCallback((info_id) => {
     axios
@@ -52,12 +54,18 @@ const Tabcontent: FC = ({ children }) => {
       });
   }, []);
 
-  const onClickShowPwd = useCallback(
-    (idx) => {
-      setShowPwd(showPwd.map((item, index) => (index === idx ? !item : item)));
-    },
-    [showPwd],
-  );
+  const onClickShowPwd = useCallback((e) => {
+    setPwd('');
+    setShowPwd((prev) => !prev);
+  }, []);
+
+  const onChangePwd = useCallback((e) => {
+    setPwd(e.target.value);
+  }, []);
+
+  const stopPropagation = useCallback((e) => {
+    e.stopPropagation();
+  }, []);
 
   if (!tabInfo) {
     return null;
@@ -84,26 +92,9 @@ const Tabcontent: FC = ({ children }) => {
                 <td>{item.userEmail}</td>
                 <td>{item.hint}</td>
                 <td>
-                  <span
-                    onClick={() => {
-                      onClickShowPwd(index);
-                    }}
-                  >
+                  <span onClick={onClickShowPwd}>
                     {/* <ProfileImg src={gravatar.url(userData.email, { s: '28px', d: 'retro' })} alt={userData.nickname} /> */}
-                    <button>pwd</button>
-                    {showPwd[index] && (
-                      <div>input</div>
-                      // <Menu style={{ right: 0, top: 38 }} show={showUserMenu} onCloseModal={onCloseUserProfile}>
-                      //   <ProfileModal>
-                      //     <img src={gravatar.url(userData.email, { s: '36px', d: 'retro' })} alt={userData.nickname} />
-                      //     <div>
-                      //       <span id="profile-name">{userData.nickname}</span>
-                      //       <span id="profile-active">Active</span>
-                      //     </div>
-                      //   </ProfileModal>
-                      //   <LogOutButton onClick={onLogout}>로그아웃</LogOutButton>
-                      // </Menu>
-                    )}
+                    <button>암호 보기</button>
                   </span>
                 </td>
                 <td>
@@ -121,6 +112,15 @@ const Tabcontent: FC = ({ children }) => {
         </tbody>
       </Content>
       {children}
+      {showPwd && (
+        <DarkBackground onClick={onClickShowPwd}>
+          <DialogBlock onClick={stopPropagation}>
+            <h3>{'로그인시 사용한 비밀번호를 입력해주세요.'}</h3>
+            <p>{'비밀번호'}</p>
+            <input type="password" value={pwd} onChange={onChangePwd} />
+          </DialogBlock>
+        </DarkBackground>
+      )}
     </>
   );
 };

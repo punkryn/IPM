@@ -143,6 +143,16 @@ export const WorkspaceName = styled.button`
 export const MenuScroll = styled.div`
   height: calc(100vh - 102px);
   overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &:hover {
+    &::-webkit-scrollbar {
+      display: unset;
+    }
+  }
 `;
 
 export const WorkspaceModal = styled.div`

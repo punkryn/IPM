@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 
 export const Remove = styled.span`
   display: flex;
@@ -20,12 +21,13 @@ export const Nav = styled.ul`
   list-style: none;
 
   & li {
-    background: none;
+    background: #f8f8f8;
     color: #222;
     display: inline-block;
     padding: 10px 15px;
     cursor: pointer;
     height: 64px;
+    border-right: 1px solid #e8e8e8;
   }
 
   & li:hover {
@@ -39,8 +41,9 @@ export const Nav = styled.ul`
   }
 
   & li.active {
-    background: #ededed;
+    background: #ffffff;
     color: #222;
+    border-bottom: 5px solid #7ea21e;
   }
 `;
 

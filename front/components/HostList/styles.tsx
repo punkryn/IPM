@@ -23,6 +23,10 @@ export const CollapseButton = styled.button<{ collapse: boolean }>`
 export const TabCategory = styled.a`
   cursor: pointer;
 
+  & span {
+    color: #ffffff;
+  }
+
   &:hover {
     font-size: large;
   }

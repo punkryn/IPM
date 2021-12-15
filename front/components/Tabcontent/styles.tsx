@@ -13,7 +13,7 @@ export const Remove = styled.span`
 `;
 
 export const Content = styled.table`
-  background: #ededed;
+  background: #ffffff;
   padding: 15px;
   text-align: left;
   overflow: auto;

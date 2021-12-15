@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import { IInfo, ITabInfo, IUser } from '@typings/db';
 import fetcher from '@utils/fetcher';
 import tabFetcher from '@utils/tabFetcher';
@@ -5,6 +6,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import useSWR, { useSWRConfig } from 'swr';
+import { RuntimeGlobals } from 'webpack';
 import { CollapseButton, TabCategory } from './styles';
 
 const HostList: FC = () => {
@@ -87,7 +89,7 @@ const HostList: FC = () => {
                   aria-hidden="true"
                 />
               </CollapseButton>
-              <span>{item.tab_name}</span>
+              <span style={{ color: '#ffefff' }}>{item.tab_name}</span>
             </h2>
             <div>
               {!tabCollapse[index] &&
@@ -100,9 +102,6 @@ const HostList: FC = () => {
                           {item2.host}
                         </span>
                       </TabCategory>
-                      /* <NavLink key={item2.info_id} to={`/${userData?.nickname}`}>
-                          <span>{item2.host}</span>
-                        </NavLink> */
                     );
                   }
                 })}

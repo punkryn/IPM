@@ -156,10 +156,6 @@ const Tabnav = () => {
     [tabName, userData, inputFlag],
   );
 
-  const onHeaderLoad = useCallback(() => {
-    console.log('load');
-  }, []);
-
   if (userData === undefined) {
     return <div>loading...</div>;
   }

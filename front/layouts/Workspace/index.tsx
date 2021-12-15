@@ -2,7 +2,7 @@ import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import React, { FC, useCallback, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 import {
   Channels,
   Chats,
@@ -22,6 +22,7 @@ import { IUser } from '@typings/db';
 import HostList from '@components/HostList';
 
 const Workspace: FC = ({ children }) => {
+  const { mutate: tmpMutate } = useSWRConfig();
   const { data: userData, error, mutate } = useSWR<IUser | false>('/api/users', fetcher);
   const [showUserMenu, setShowUserMenu] = useState(false);
 
@@ -32,6 +33,7 @@ const Workspace: FC = ({ children }) => {
       })
       .then(() => {
         mutate();
+        tmpMutate('tabIndex', 0);
       })
       .catch((err) => {
         console.log(err);

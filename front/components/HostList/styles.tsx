@@ -19,3 +19,11 @@ export const CollapseButton = styled.button<{ collapse: boolean }>`
     }
   `};
 `;
+
+export const TabCategory = styled.a`
+  cursor: pointer;
+
+  &:hover {
+    font-size: large;
+  }
+`;

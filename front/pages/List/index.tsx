@@ -39,7 +39,11 @@ const List = () => {
       });
 
       // setCurrentTab(minId);
-      if (tabIndex === undefined) tmpMutate('tabIndex', minId);
+      if (tabIndex === undefined) {
+        tmpMutate('tabIndex', minId);
+      } else if (tabIndex === 0) {
+        tmpMutate('tabIndex', minId);
+      }
     }
   }, [tabInfo]);
 
@@ -75,13 +79,17 @@ const List = () => {
   //   // console.log(tabCollapse);
   // }, [tabsInfo]);
 
-  if (userData === undefined || tabInfo === undefined) {
+  if (userData === undefined) {
     return <div>loading...</div>;
   }
 
   if (!userData) {
     console.log('redirect');
     return <Navigate to="/login" />;
+  }
+
+  if (tabInfo === undefined) {
+    return <div>loading...</div>;
   }
 
   return (

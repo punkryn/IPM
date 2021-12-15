@@ -30,16 +30,16 @@ const Tabcontent: FC = ({ children }) => {
 
   const { data: tabIndex } = useSWR('tabIndex');
 
-  const [info, setInfo] = useState([
-    {
-      info_id: 0,
-      tab_id: 0,
-      tab_name: '',
-      userEmail: '',
-      hint: '',
-      host: '',
-    },
-  ]);
+  // const [info, setInfo] = useState([
+  //   {
+  //     info_id: 0,
+  //     tab_id: 0,
+  //     tab_name: '',
+  //     userEmail: '',
+  //     hint: '',
+  //     host: '',
+  //   },
+  // ]);
 
   useEffect(() => {
     if (tabInfo !== undefined && tabInfo) {
@@ -52,7 +52,8 @@ const Tabcontent: FC = ({ children }) => {
       // if (tabIndex === 0) {
       //   setInfo(tabInfo.filter((item) => item.tab_id === currentTab));
       // } else {
-      setInfo(tabInfo.filter((item) => item.tab_id === tabIndex));
+      // setInfo(tabInfo.filter((item) => item.tab_id === tabIndex));
+      // console.log(tabInfo);
       // }
     }
   }, [tabInfo, tabIndex]);
@@ -69,6 +70,10 @@ const Tabcontent: FC = ({ children }) => {
       });
   }, []);
 
+  if (!tabInfo) {
+    return null;
+  }
+
   return (
     <>
       <Content>
@@ -81,7 +86,8 @@ const Tabcontent: FC = ({ children }) => {
           </tr>
         </thead>
         <tbody>
-          {info?.map((item, index) => {
+          {tabInfo?.map((item, index) => {
+            if (item.tab_id !== tabIndex) return;
             return (
               <tr key={index}>
                 <td>{item.host}</td>
@@ -90,7 +96,7 @@ const Tabcontent: FC = ({ children }) => {
                 <td>
                   <Remove
                     onClick={() => {
-                      onRemove(info[index].info_id);
+                      onRemove(tabInfo[index].info_id);
                     }}
                   >
                     <MdDelete />

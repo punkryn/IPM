@@ -5,7 +5,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import useSWR, { useSWRConfig } from 'swr';
-import { CollapseButton } from './styles';
+import { CollapseButton, TabCategory } from './styles';
 
 const HostList: FC = () => {
   const { mutate: tmpMutate } = useSWRConfig();
@@ -49,17 +49,21 @@ const HostList: FC = () => {
 
   const onClickActive = useCallback(
     (e) => {
+      // console.log(typeof e.target.children[0].tabIndex);
       if (tabInfo && tabInfo !== undefined) {
+        const idx = e.target.tagName === 'SPAN' ? e.target.tabIndex : e.target.children[0].tabIndex;
         const currentUl = headerRefData.current.children;
         for (let i = 0; i < currentUl.length - 1; i++) {
-          if (i === e.target.tabIndex) {
+          if (i === idx) {
             currentUl[i].className = 'active';
           } else {
             currentUl[i].className = '';
           }
         }
 
-        tmpMutate('tabIndex', Number(e.target.accessKey));
+        const access =
+          e.target.tagName === 'SPAN' ? Number(e.target.accessKey) : Number(e.target.children[0].accessKey);
+        tmpMutate('tabIndex', access);
       }
     },
     [headerRefData],
@@ -95,11 +99,11 @@ const HostList: FC = () => {
                   if (item.tab_id === item2.tab_id) {
                     return (
                       // <div key={index}>{item.host}</div>
-                      <a key={item2.info_id} onClick={onClickActive}>
+                      <TabCategory key={item2.info_id} onClick={onClickActive}>
                         <span tabIndex={index} accessKey={String(item2.tab_id)}>
                           {item2.host}
                         </span>
-                      </a>
+                      </TabCategory>
                       /* <NavLink key={item2.info_id} to={`/${userData?.nickname}`}>
                           <span>{item2.host}</span>
                         </NavLink> */

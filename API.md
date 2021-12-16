@@ -56,3 +56,9 @@ HTTP 요청 리스트(ajax)
 - :id인 탭 이름 변경
 - body: { name: string(탭 이름) }
 - return: 'ok'
+
+### POST /users/:nickname/password
+
+- :nickname으로 로그인한 유저의 특정 행 비밀번호 열람 요청
+- body: { password: string(로그인 암호), currentPwd: number(비밀번호 테이블 id) }
+- return: [{userPassword: string}]

@@ -6,7 +6,7 @@ import React, { FC, useCallback, useEffect, useState, VFC } from 'react';
 import { MdDelete } from 'react-icons/md';
 import { useParams } from 'react-router';
 import useSWR from 'swr';
-import { Content, DarkBackground, DialogBlock, Remove } from './styles';
+import { Button, ButtonGroup, Content, DarkBackground, DialogBlock, Remove, Error } from './styles';
 
 interface Props {
   currentTab: number;
@@ -32,6 +32,12 @@ const Tabcontent: FC = ({ children }) => {
   const [showPwd, setShowPwd] = useState<boolean>(false);
 
   const [pwd, setPwd] = useState<string>('');
+  const [pwdError, setPwdError] = useState(false);
+
+  const [currentPwd, setCurrentPwd] = useState(0);
+
+  const [hostPassword, setHostPassword] = useState('');
+  const [correctPwd, setCorrectPwd] = useState(false);
 
   // useEffect(() => {
   //   if (tabInfo) {
@@ -57,11 +63,35 @@ const Tabcontent: FC = ({ children }) => {
   const onClickShowPwd = useCallback((e) => {
     setPwd('');
     setShowPwd((prev) => !prev);
+    setPwdError(false);
+    setCurrentPwd(Number(e.target.accessKey));
   }, []);
 
   const onChangePwd = useCallback((e) => {
     setPwd(e.target.value);
   }, []);
+
+  const onSubmit = useCallback(
+    (e) => {
+      if (!userData) return;
+      axios
+        .post(`/api/users/${userData?.nickname}/password`, {
+          password: pwd,
+          currentPwd,
+        })
+        .then((response) => {
+          // console.log(response);
+          // setShowPwd(false);
+          setPwdError(false);
+          setCorrectPwd(true);
+          setHostPassword(response.data[0].userPassword);
+        })
+        .catch((err) => {
+          setPwdError(err.response?.status === 401);
+        });
+    },
+    [pwd, userData, tabIndex],
+  );
 
   const stopPropagation = useCallback((e) => {
     e.stopPropagation();
@@ -79,7 +109,7 @@ const Tabcontent: FC = ({ children }) => {
             <th>호스트</th>
             <th>아이디</th>
             <th>힌트</th>
-            <th>비밀번호</th>
+            <th>암호</th>
             <th></th>
           </tr>
         </thead>
@@ -94,7 +124,9 @@ const Tabcontent: FC = ({ children }) => {
                 <td>
                   <span onClick={onClickShowPwd}>
                     {/* <ProfileImg src={gravatar.url(userData.email, { s: '28px', d: 'retro' })} alt={userData.nickname} /> */}
-                    <button>암호 보기</button>
+                    <Button style={{ background: '#228be6' }} accessKey={String(tabInfo[index].info_id)}>
+                      암호 보기
+                    </Button>
                   </span>
                 </td>
                 <td>
@@ -113,11 +145,43 @@ const Tabcontent: FC = ({ children }) => {
       </Content>
       {children}
       {showPwd && (
-        <DarkBackground onClick={onClickShowPwd}>
+        <DarkBackground>
           <DialogBlock onClick={stopPropagation}>
-            <h3>{'로그인시 사용한 비밀번호를 입력해주세요.'}</h3>
+            <h3>{'로그인시 사용한 암호를 입력해주세요.'}</h3>
             <p>{'비밀번호'}</p>
-            <input type="password" value={pwd} onChange={onChangePwd} />
+            {!correctPwd && <input type="password" value={pwd} onChange={onChangePwd} style={{ width: '100%' }} />}
+            {correctPwd && <p>{hostPassword}</p>}
+            {pwdError && <Error>암호가 일치하지 않습니다.</Error>}
+
+            {!correctPwd && (
+              <ButtonGroup>
+                <Button style={{ background: '#228be6' }} onClick={onSubmit}>
+                  제출
+                </Button>
+                <Button
+                  style={{ background: '#495057' }}
+                  onClick={() => {
+                    setShowPwd(false);
+                    setPwdError(false);
+                  }}
+                >
+                  취소
+                </Button>
+              </ButtonGroup>
+            )}
+            {correctPwd && (
+              <ButtonGroup>
+                <Button
+                  style={{ background: '#495057' }}
+                  onClick={() => {
+                    setShowPwd(false);
+                    setCorrectPwd(false);
+                  }}
+                >
+                  닫기
+                </Button>
+              </ButtonGroup>
+            )}
           </DialogBlock>
         </DarkBackground>
       )}

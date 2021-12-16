@@ -183,4 +183,32 @@ router.post("/users/logout", isLoggedIn, (req, res) => {
   });
 });
 
+router.post("/users/:nickname/password", isLoggedIn, async (req, res, next) => {
+  const body = req.body;
+  const params = req.params;
+  try {
+    const queryString = `select password from users where nickname = '${params.nickname}'`;
+    const response = await pool.query(queryString);
+    console.log("res", response[0]);
+
+    if (Array.isArray(response[0]) && "password" in response[0][0]) {
+      const result = await bcrpyt.compare(
+        body.password,
+        response[0][0].password
+      );
+      if (result) {
+        // const qs = `select users.nickname, information.userEmail, information.userPassword from users join tab on users.id = tab.user_row_id_from_tab join information on tab.id = information.tab_row_id where users.nickname = '${params.nickname}' and tab.id = ${body.tabIndex};`;
+        const qs = `select userPassword from information where id = ${body.currentPwd}`;
+        const response2 = await pool.query(qs);
+        res.send(response2[0]);
+      } else {
+        res.status(401).send("암호가 일치하지 않습니다");
+      }
+    }
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
 export default router;

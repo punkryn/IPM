@@ -49,6 +49,17 @@ const Workspace: FC = ({ children }) => {
     setShowUserMenu(false);
   }, []);
 
+  // const onClickTmp = useCallback((e) => {
+  //   axios
+  //     .post('/api/tmp', {})
+  //     .then((response) => {
+  //       console.log(response.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
+
   if (userData === undefined) {
     return <div>loading...</div>;
   }

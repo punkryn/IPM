@@ -47,38 +47,6 @@ const List = () => {
     }
   }, [tabInfo]);
 
-  // useEffect(() => {
-  //   axios.get(`/api/tab/${nickname}`).then((response) => {
-  //     // console.log(response.data);
-  //     // setCurrentTab(response.data[0].minId);
-  //     // tmpMutate('tabIndex', response.data[0].minId);
-  //   });
-  // }, []);
-
-  // const onChangeTab = useCallback(
-  //   (e) => {
-  //     if (typeof userData !== 'boolean') {
-  //       mutate();
-  //       console.log('userData', userData);
-  //       setTabNow(Number(userData?.tabs[Number(e.target.id)]?.tab_id));
-  //     }
-  //   },
-  //   [userData],
-  // );
-
-  // useEffect(() =>  {
-  //   if (tabCollapse.length === 0) {
-  //     for (let i = 0; tabsInfo && i < tabsInfo?.length; i++) {
-  //       setTabCollapse((prev) => [...prev, false]);
-  //     }
-  //   } else {
-  //     setTabCollapse((prev) => [...prev, false]);
-  //   }
-
-  //   // setTabCollapse(tabCollapse);
-  //   // console.log(tabCollapse);
-  // }, [tabsInfo]);
-
   if (userData === undefined) {
     return <div>loading...</div>;
   }

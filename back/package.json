@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@types/cors": "^2.8.12",
+    "aes256": "^1.1.0",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

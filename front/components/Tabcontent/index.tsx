@@ -84,7 +84,7 @@ const Tabcontent: FC = ({ children }) => {
           // setShowPwd(false);
           setPwdError(false);
           setCorrectPwd(true);
-          setHostPassword(response.data[0].userPassword);
+          setHostPassword(response.data);
         })
         .catch((err) => {
           setPwdError(err.response?.status === 401);
@@ -149,7 +149,9 @@ const Tabcontent: FC = ({ children }) => {
           <DialogBlock onClick={stopPropagation}>
             <h3>{'로그인시 사용한 암호를 입력해주세요.'}</h3>
             <p>{'비밀번호'}</p>
-            {!correctPwd && <input type="password" value={pwd} onChange={onChangePwd} style={{ width: '100%' }} />}
+            {!correctPwd && (
+              <input autoFocus type="password" value={pwd} onChange={onChangePwd} style={{ width: '100%' }} />
+            )}
             {correctPwd && <p>{hostPassword}</p>}
             {pwdError && <Error>암호가 일치하지 않습니다.</Error>}
 

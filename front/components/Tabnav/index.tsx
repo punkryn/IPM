@@ -1,3 +1,4 @@
+import { Button, ButtonGroup, DarkBackground, DialogBlock } from '@components/Tabcontent/styles';
 import { IInfo, ITabInfo, IUser } from '@typings/db';
 import fetcher from '@utils/fetcher';
 import tabFetcher from '@utils/tabFetcher';
@@ -39,6 +40,9 @@ const Tabnav = () => {
   const headerRef = useRef<HTMLUListElement>(null);
 
   const { data: headerRefData } = useSWR('headerRef');
+
+  const [showPanel, setShowPanel] = useState(false);
+  const [selectedTabtoRemove, setSelectedTabtoRemove] = useState(-1);
 
   useEffect(() => {
     if (userData && inputFlag.length === 0) {
@@ -84,32 +88,29 @@ const Tabnav = () => {
 
   const onRemove = useCallback(
     (e) => {
-      e.stopPropagation();
       if (typeof userData === 'boolean' || userData === undefined) {
         return;
       }
-      // console.log(e.target.tagName);
-      const index = e.target.parentElement.parentElement.parentElement.id;
-      if (e.target.tagName === 'path') {
-        axios
-          .delete(`/api/tab/${userData.tabs[index].tab_id}`)
-          .then((response) => {
-            mutate();
-            tabsMutate();
-            tabMutate();
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
+
+      axios
+        .delete(`/api/tab/${userData.tabs[selectedTabtoRemove].tab_id}`)
+        .then((response) => {
+          mutate();
+          tabsMutate();
+          tabMutate();
+          setShowPanel(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    [userData],
+    [userData, selectedTabtoRemove],
   );
 
   const onActive = useCallback(
     (e) => {
       if (e.target.className === 'active') {
-        console.log(inputFlag);
+        // console.log(inputFlag);
         setTabName(e.target.innerText);
         setInputFlag(inputFlag.map((item, index) => (index === Number(e.target.id) ? !item : item)));
       } else {
@@ -156,6 +157,20 @@ const Tabnav = () => {
     [tabName, userData, inputFlag],
   );
 
+  const checkRemove = useCallback((e) => {
+    setShowPanel(true);
+    if (e.target.tagName === 'svg') {
+      setSelectedTabtoRemove(Number(e.target.parentElement.parentElement.id));
+    } else if (e.target.tagName === 'path') {
+      setSelectedTabtoRemove(Number(e.target.parentElement.parentElement.parentElement.id));
+    }
+    e.stopPropagation();
+  }, []);
+
+  const stopPropagation = useCallback((e) => {
+    e.stopPropagation();
+  }, []);
+
   if (userData === undefined) {
     return <div>loading...</div>;
   }
@@ -172,7 +187,7 @@ const Tabnav = () => {
           return (
             <li key={index} className="active" onClick={onActive} id={String(index)}>
               {item.name}
-              <Remove onClick={onRemove}>
+              <Remove onClick={checkRemove}>
                 <MdDelete />
               </Remove>
             </li>
@@ -181,7 +196,7 @@ const Tabnav = () => {
           return (
             <li key={index} onClick={onActive} id={String(index)}>
               {item.name}
-              <Remove onClick={onRemove}>
+              <Remove onClick={checkRemove}>
                 <MdDelete />
               </Remove>
             </li>
@@ -200,6 +215,31 @@ const Tabnav = () => {
         }
       })}
       <AddButton onClick={onCreateNewTab}>+</AddButton>
+      {showPanel && (
+        <DarkBackground
+          onClick={() => {
+            setShowPanel(false);
+          }}
+        >
+          <DialogBlock onClick={stopPropagation}>
+            <h3>{'선택한 탭을 삭제하시겠습니까?'}</h3>
+            {/* <p>{'비밀번호'}</p> */}
+            <ButtonGroup>
+              <Button style={{ background: '#228be6' }} onClick={onRemove}>
+                삭제
+              </Button>
+              <Button
+                style={{ background: '#495057' }}
+                onClick={() => {
+                  setShowPanel(false);
+                }}
+              >
+                취소
+              </Button>
+            </ButtonGroup>
+          </DialogBlock>
+        </DarkBackground>
+      )}
     </Nav>
   );
 };

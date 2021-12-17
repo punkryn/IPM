@@ -2,9 +2,11 @@ import express, { query } from "express";
 import pool from "../pool";
 import bcrpyt from "bcrypt";
 import passport from "passport";
+import { createCipheriv, createDecipheriv, randomBytes } from "crypto";
 import { isLoggedIn, isNotLoggedIn } from "./middlewares";
 
 const router = express.Router();
+const nonce = randomBytes(12);
 
 router.delete("/tab/:id", isLoggedIn, async (req, res, next) => {
   const param = req.params;
@@ -80,9 +82,37 @@ router.post("/tab/:tab", isLoggedIn, async (req, res, next) => {
   const params = req.params;
   const body = req.body;
   try {
-    const queryString = `insert into information(userEmail, userPassword, hint, host, tab_row_id) values('${body.id}', '${body.pwd}', '${body.hint}', '${body.host}', ${params.tab})`;
-    await pool.query(queryString);
-    res.send("ok");
+    if (process.env.AES_KEY !== undefined && process.env.AAD !== undefined) {
+      console.log("key", process.env.AES_KEY, process.env.AAD);
+      const aad = Buffer.from(process.env.AAD, "hex");
+      const cipher = createCipheriv("aes-192-ccm", process.env.AES_KEY, nonce, {
+        authTagLength: 16,
+      });
+
+      cipher.setAAD(aad, {
+        plaintextLength: Buffer.byteLength(body.pwd),
+      });
+
+      const ciphertext = cipher.update(body.pwd, "utf8");
+      cipher.final();
+      const tag = cipher.getAuthTag();
+
+      console.log("ciphertext", ciphertext);
+      console.log(ciphertext.toString("hex"));
+      console.log(Buffer.from(ciphertext.toString("hex"), "hex"));
+      console.log("tag", tag);
+      console.log(tag.toString("hex"));
+
+      const queryString = `insert into information(userEmail, userPassword, hint, host, tab_row_id, tag, ran) values('${
+        body.id
+      }', '${ciphertext.toString("hex")}', '${body.hint}', '${body.host}', ${
+        params.tab
+      }, '${tag.toString("hex")}', '${nonce.toString("hex")}')`;
+      await pool.query(queryString);
+
+      return res.send("ok");
+    }
+    throw new Error("unknown");
   } catch (err) {
     console.log(err);
     next(err);
@@ -198,9 +228,50 @@ router.post("/users/:nickname/password", isLoggedIn, async (req, res, next) => {
       );
       if (result) {
         // const qs = `select users.nickname, information.userEmail, information.userPassword from users join tab on users.id = tab.user_row_id_from_tab join information on tab.id = information.tab_row_id where users.nickname = '${params.nickname}' and tab.id = ${body.tabIndex};`;
-        const qs = `select userPassword from information where id = ${body.currentPwd}`;
+        const qs = `select userPassword, tag, ran from information where id = ${body.currentPwd}`;
         const response2 = await pool.query(qs);
-        res.send(response2[0]);
+        if (
+          process.env.AES_KEY !== undefined &&
+          process.env.AAD !== undefined
+        ) {
+          if (
+            Array.isArray(response2[0]) &&
+            "userPassword" in response2[0][0] &&
+            "tag" in response2[0][0]
+          ) {
+            const aad = Buffer.from(process.env.AAD, "hex");
+            const tag = Buffer.from(response2[0][0].tag, "hex");
+            const ciphertext = Buffer.from(response2[0][0].userPassword, "hex");
+
+            const decipher = createDecipheriv(
+              "aes-192-ccm",
+              process.env.AES_KEY,
+              Buffer.from(response2[0][0].ran, "hex"),
+              {
+                authTagLength: 16,
+              }
+            );
+            decipher.setAuthTag(tag);
+            decipher.setAAD(aad, {
+              plaintextLength: ciphertext.length,
+            });
+            const receivedPlaintext = decipher.update(
+              ciphertext,
+              undefined,
+              "utf8"
+            );
+
+            try {
+              decipher.final();
+            } catch (err) {
+              console.log("authentication failed", { cause: err });
+              next(err);
+            }
+
+            console.log("rec", receivedPlaintext);
+            res.send(receivedPlaintext);
+          }
+        }
       } else {
         res.status(401).send("암호가 일치하지 않습니다");
       }
@@ -210,5 +281,26 @@ router.post("/users/:nickname/password", isLoggedIn, async (req, res, next) => {
     next(err);
   }
 });
+
+// router.post("/tmp", async (req, res, next) => {
+//   const qs2 = `select * from information`;
+//   const result = await pool.query(qs2);
+//   if (Array.isArray(result[0])) {
+//     result[0].forEach(async (item) => {
+//       if (
+//         process.env.AES_KEY !== undefined &&
+//         process.env.AAD !== undefined &&
+//         "userPassword" in item
+//       ) {
+//         console.log("key", process.env.AES_KEY, process.env.AAD);
+//         const qs = `update information set ran ='${nonce.toString(
+//           "hex"
+//         )}' where id = ${item.id}`;
+//         await pool.query(qs);
+//       }
+//     });
+//     return res.send("ok");
+//   }
+// });
 
 export default router;

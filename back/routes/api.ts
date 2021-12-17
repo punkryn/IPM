@@ -219,7 +219,6 @@ router.post("/users/:nickname/password", isLoggedIn, async (req, res, next) => {
   try {
     const queryString = `select password from users where nickname = '${params.nickname}'`;
     const response = await pool.query(queryString);
-    console.log("res", response[0]);
 
     if (Array.isArray(response[0]) && "password" in response[0][0]) {
       const result = await bcrpyt.compare(
@@ -267,8 +266,6 @@ router.post("/users/:nickname/password", isLoggedIn, async (req, res, next) => {
               console.log("authentication failed", { cause: err });
               next(err);
             }
-
-            console.log("rec", receivedPlaintext);
             res.send(receivedPlaintext);
           }
         }

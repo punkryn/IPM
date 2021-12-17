@@ -83,7 +83,6 @@ router.post("/tab/:tab", isLoggedIn, async (req, res, next) => {
   const body = req.body;
   try {
     if (process.env.AES_KEY !== undefined && process.env.AAD !== undefined) {
-      console.log("key", process.env.AES_KEY, process.env.AAD);
       const aad = Buffer.from(process.env.AAD, "hex");
       const cipher = createCipheriv("aes-192-ccm", process.env.AES_KEY, nonce, {
         authTagLength: 16,
@@ -96,12 +95,6 @@ router.post("/tab/:tab", isLoggedIn, async (req, res, next) => {
       const ciphertext = cipher.update(body.pwd, "utf8");
       cipher.final();
       const tag = cipher.getAuthTag();
-
-      console.log("ciphertext", ciphertext);
-      console.log(ciphertext.toString("hex"));
-      console.log(Buffer.from(ciphertext.toString("hex"), "hex"));
-      console.log("tag", tag);
-      console.log(tag.toString("hex"));
 
       const queryString = `insert into information(userEmail, userPassword, hint, host, tab_row_id, tag, ran) values('${
         body.id

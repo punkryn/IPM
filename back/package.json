@@ -3,7 +3,8 @@
     "build": "tsc",
     "start:dev": "tsc-watch --onSuccess \"node dist/app.js\"",
     "prestart": "npm run build",
-    "start": "node dist/app.js"
+    "start": "node dist/app.js",
+    "start:prod": "pm2 start dist/app.js"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

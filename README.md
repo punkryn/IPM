@@ -177,7 +177,8 @@
 
 ### Back
 1. MySQL 설치 및 스키마, 테이블 생성
-2. ERD\n
+2. ERD
+
 ![ERD](https://user-images.githubusercontent.com/22855979/147027958-24b8e519-bc32-4a8e-877c-eeb706067a8e.png)
 
 3. package.json
@@ -216,5 +217,40 @@
 
 
 ### Server
+1. oracle cloud 컴퓨트 인스턴스 생성
+        - 고정 IP 설정
+        - 포트 개방
+
+2. SSH 접속
+        - RSA private key 생성
+        - Putty로 원격 접속
+
+3. 리눅스 설정
+        - 오라클에서 생성한 인스턴스는 RedHat 계열이다.
+        - 패키지 업그레이드
+        - git 설정
+        - nodejs 설치
+        - 방화벽 설정으로 포트 개방
+        - 환경변수 설정
+        - pm2로 서비스 구동
+        - 동작 확인
+        
+4. mysql 설치
+        - docker로 mysql 설치
+        - 이미지 pull
+        - container 생성
+        - docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password --name ipm_db 도커이미지ID --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+        - 3306 포트 개방
+        - 로컬에서 만든 데이터베이스를 마이그레이션
+
+5. nginx 설치
+
+## Reference
+- https://github.com/ZeroCho/sleact
+- https://react.vlpt.us/
+- https://github.com/amamov/teaching-nestjs-a-to-z
+- https://github.com/ZeroCho/ts-nodebird/tree/master/ch3/back
+- https://thebook.io/080229/
+
 
 

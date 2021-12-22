@@ -243,7 +243,42 @@
       - 3306 포트 개방
       - 로컬에서 만든 데이터베이스를 마이그레이션
 
-5. nginx 설치
+6. git pull
+      - 빌드한 파일들을 github에서 가져옴
+```
+./dist
+├── app.js
+├── passport
+│   ├── index.js
+│   └── local.js
+├── pool.js
+├── public
+│   ├── 1804429.png
+│   ├── dist
+│   │   ├── 319.js
+│   │   ├── 319.js.map
+│   │   ├── 527.js
+│   │   ├── 527.js.LICENSE.txt
+│   │   ├── 527.js.map
+│   │   ├── 638.js
+│   │   ├── 638.js.map
+│   │   ├── 678.js
+│   │   ├── 678.js.map
+│   │   ├── 695.js
+│   │   ├── 695.js.map
+│   │   ├── 895.js
+│   │   ├── 895.js.map
+│   │   ├── app.js
+│   │   ├── app.js.LICENSE.txt
+│   │   ├── app.js.map
+│   │   └── report.html
+│   └── index.html
+└── routes
+    ├── api.js
+    └── middlewares.js
+
+```
+
 
 ## Reference
 - https://github.com/ZeroCho/sleact

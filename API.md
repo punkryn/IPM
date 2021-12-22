@@ -57,6 +57,16 @@ HTTP 요청 리스트(ajax)
 - body: { name: string(탭 이름) }
 - return: 'ok'
 
+### DELETE /tab/info/:id
+
+- :id인 암호 데이터 삭제
+- return: 'ok'
+
+### GET /tabs/info/:nickname
+
+- :nickname인 유저의 탭 정보를 가져옴
+- return: ITabInfo | undefined
+
 ### POST /users/:nickname/password
 
 - :nickname으로 로그인한 유저의 특정 행 비밀번호 열람 요청

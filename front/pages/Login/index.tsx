@@ -31,7 +31,7 @@ const LogIn = () => {
     [email, password],
   );
 
-  console.log(data);
+  // console.log(data);
 
   if (data === undefined) {
     return <div>로딩중...</div>;

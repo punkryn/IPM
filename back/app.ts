@@ -47,7 +47,7 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: false, // https -> true
-      domain: prod ? ".ipm.com" : undefined,
+      // domain: prod ? ".ipm.com" : undefined,
     },
     name: "connect.sid",
   })
@@ -64,8 +64,7 @@ app.get("/", (req, res, next) => {
 //* ROUTER
 app.get("/", async (req, res) => {
   try {
-    const data = await pool.query("select * from users");
-    res.json(data[0]);
+    res.send("hello");
   } catch (err) {
     res.status(500).json(err);
   }
@@ -76,7 +75,15 @@ app.use("/api", apiRouter);
 // * 404 middleware
 app.use((req, res, next) => {
   console.log("this is error middleware");
-  res.send({ error: "404 not found" });
+  // res.send({ error: "404 not found" });
+  let options = {
+    root: path.join(__dirname, "public"),
+    headers: {
+      "x-timestamp": Date.now(),
+      "x-sent": true,
+    },
+  };
+  res.sendFile("index.html", options);
 });
 
 app.listen(app.get("PORT"), async () => {

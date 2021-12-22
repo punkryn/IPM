@@ -150,7 +150,7 @@ const Tabnav = () => {
             console.log(err);
           });
       } else if (e.code === 'Escape') {
-        console.log(e.target);
+        // console.log(e.target);
         setInputFlag(inputFlag.map((item, index) => (index === Number(e.target.id) ? !item : item)));
       }
     },

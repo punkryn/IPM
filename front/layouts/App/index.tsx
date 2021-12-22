@@ -15,6 +15,7 @@ const App = () => {
       <Route path="/signup" element={<SignUp />} />
       {/* <Route path="/main/tab/:nickname" element={<List />} /> */}
       <Route path="/:nickname" element={<List />} />
+      <Route path="/:nickname/*" element={<Navigate replace to="/login" />} />
     </Routes>
   );
 };

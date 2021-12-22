@@ -120,7 +120,13 @@ const PushButton = () => {
               id="hint"
             />
             PASSWORD{' '}
-            <Input placeholder="로그인에 필요한 비밀번호를 입력하세요." onChange={onChange} value={pwd} id="pwd" />
+            <Input
+              type="password"
+              placeholder="로그인에 필요한 비밀번호를 입력하세요."
+              onChange={onChange}
+              value={pwd}
+              id="pwd"
+            />
           </InsertForm>
         </InsertFormPositioner>
       )}

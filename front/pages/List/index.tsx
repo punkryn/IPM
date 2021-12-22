@@ -60,6 +60,11 @@ const List = () => {
     return <div>loading...</div>;
   }
 
+  if (userData.nickname !== nickname) {
+    console.log('redirect');
+    return <Navigate to="/login" />;
+  }
+
   return (
     <Workspace>
       <Tab>

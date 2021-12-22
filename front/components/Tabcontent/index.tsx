@@ -152,7 +152,7 @@ const Tabcontent: FC = ({ children }) => {
             {!correctPwd && (
               <input autoFocus type="password" value={pwd} onChange={onChangePwd} style={{ width: '100%' }} />
             )}
-            {correctPwd && <p>{hostPassword}</p>}
+            {correctPwd && <p style={{ wordBreak: 'break-all' }}>{hostPassword}</p>}
             {pwdError && <Error>암호가 일치하지 않습니다.</Error>}
 
             {!correctPwd && (

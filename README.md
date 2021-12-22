@@ -210,7 +210,7 @@
       - 이메일 존재 여부, 암호 일치 여부를 파악
 
 8. API 작성
-      - API.md 참조
+      - [API.md](https://github.com/punkryn/IPM/main/API.md) 참조
 
 9. 빌드 및 배포
       - github private repository에 dist폴더 아래의 파일들을 push

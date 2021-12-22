@@ -39,3 +39,11 @@
 ## Example
 1. 로그인 화면
 ![로그인](https://user-images.githubusercontent.com/22855979/147020315-b0494469-f0e0-4f30-af4b-86f71121bfb1.png)
+
+2. 회원 가입 화면
+![signup](https://user-images.githubusercontent.com/22855979/147020488-18b0006f-5b2e-4914-a7c9-dce213f18dbd.png)
+![signup2](https://user-images.githubusercontent.com/22855979/147020607-c2d2a621-8194-48e8-b68c-35458ba53ecf.png)
+
+3. 첫 화면
+![init](https://user-images.githubusercontent.com/22855979/147020682-0c087c4b-f990-4a2e-8f2a-95605a6baee7.png)
+

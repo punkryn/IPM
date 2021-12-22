@@ -125,10 +125,10 @@
       - client.tsx에서 App을 BrowserRouter로 감싸기
       - @layouts/App에 Route, Navigate, Redirect, Routes 넣기
 15. @loadable/component
-        - 라우터를 코드스플리팅 해줌
-        - npm i @loadable/component @types/loadable__component
+      - 라우터를 코드스플리팅 해줌
+      - npm i @loadable/component @types/loadable__component
 16. @pages/SignUp 작성
-        - 암호가 일치하는지 닉네임은 입력하였는지 등 유효성 검사
+      - 암호가 일치하는지 닉네임은 입력하였는지 등 유효성 검사
 
 17. 회원가입 axios로 진행
       - npm i axios
@@ -182,66 +182,66 @@
 ![ERD](https://user-images.githubusercontent.com/22855979/147027958-24b8e519-bc32-4a8e-877c-eeb706067a8e.png)
 
 3. package.json
-        - npm init으로 생성
-        - express 설치
+      - npm init으로 생성
+      - express 설치
 
 4. tsconfig.json
-        - strict: true
-        - 빌드 결과 dist폴더로 출력
+      - strict: true
+      - 빌드 결과 dist폴더로 출력
         
 5. app.ts 작성
-        - PORT 동작 확인
-        - mysql과 연결
-        - cors 설정
-        - 정적파일 제공
-        - body parser 설정
-        - cookie parser 설정
-        - dotenv 설치
-        - npm i dotenv
-        - 세션 설정
-        - 라우터 분리
+      - PORT 동작 확인
+      - mysql과 연결
+      - cors 설정
+      - 정적파일 제공
+      - body parser 설정
+      - cookie parser 설정
+      - dotenv 설치
+      - npm i dotenv
+      - 세션 설정
+      - 라우터 분리
 
 6. routes/api.ts 작성
-        - 이곳에서 api 라우터 작성
+      - 이곳에서 api 라우터 작성
 
 7. passport 라이브러리를 이용한 로그인 전략 수립
-        - passport 폴더 밑에 index.ts, local.ts 생성
-        - local.ts에 로컬 전략
-        - 이메일 존재 여부, 암호 일치 여부를 파악
+      - passport 폴더 밑에 index.ts, local.ts 생성
+      - local.ts에 로컬 전략
+      - 이메일 존재 여부, 암호 일치 여부를 파악
 
 8. API 작성
-        - API.md 참조
+      - API.md 참조
 
 9. 빌드 및 배포
-        - github private repository에 dist폴더 아래의 파일들을 push
+      - github private repository에 dist폴더 아래의 파일들을 push
 
 
 ### Server
 1. oracle cloud 컴퓨트 인스턴스 생성
-        - 고정 IP 설정
-        - 포트 개방
+      - 고정 IP 설정
+      - 포트 개방
 
 2. SSH 접속
-        - RSA private key 생성
-        - Putty로 원격 접속
+      - RSA private key 생성
+      - Putty로 원격 접속
 
 3. 리눅스 설정
-        - 오라클에서 생성한 인스턴스는 RedHat 계열이다.
-        - 패키지 업그레이드
-        - git 설정
-        - nodejs 설치
-        - 방화벽 설정으로 포트 개방
-        - 환경변수 설정
-        - pm2로 서비스 구동
-        - 동작 확인
+      - 오라클에서 생성한 인스턴스는 RedHat 계열이다.
+      - 패키지 업그레이드
+      - git 설정
+      - nodejs 설치
+      - 방화벽 설정으로 포트 개방
+      - 환경변수 설정
+      - pm2로 서비스 구동
+      - 동작 확인
         
 4. mysql 설치
-        - docker로 mysql 설치
-        - 이미지 pull
-        - container 생성
-        - docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password --name ipm_db 도커이미지ID --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-        - 3306 포트 개방
-        - 로컬에서 만든 데이터베이스를 마이그레이션
+      - docker로 mysql 설치
+      - 이미지 pull
+      - container 생성
+      - docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password --name ipm_db 도커이미지ID --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+      - 3306 포트 개방
+      - 로컬에서 만든 데이터베이스를 마이그레이션
 
 5. nginx 설치
 

@@ -177,7 +177,7 @@
 
 ### Back
 1. MySQL 설치 및 스키마, 테이블 생성
-2. ERD
+2. ERD\n
 ![ERD](https://user-images.githubusercontent.com/22855979/147027958-24b8e519-bc32-4a8e-877c-eeb706067a8e.png)
 
 3. package.json

@@ -28,6 +28,7 @@ HTTP 요청 리스트(ajax)
 
 - :tab인 탭에 정보 추가
 - body: { id: string(아이디), host: string(호스트), pwd: string(패스워드), hint: string(힌트) }
+- AES 알고리즘으로 pwd를 암호화하여 저장
 - return: 'ok'
 
 ### GET /tab/:nickname
@@ -71,4 +72,5 @@ HTTP 요청 리스트(ajax)
 
 - :nickname으로 로그인한 유저의 특정 행 비밀번호 열람 요청
 - body: { password: string(로그인 암호), currentPwd: number(비밀번호 테이블 id) }
+- AES로 암호화된 password를 복호화하여 반환
 - return: userPassword: string

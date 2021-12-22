@@ -100,9 +100,9 @@
       - npm i -D @pmmmwh/react-refresh-webpack-plugin react-refresh
       - webpack의 babel-loader 안에 설정(env) 및 plugin으로 추가
 10. fork-ts-checker-webpack-plugin
-        - webpack은 ts체크 후 eslint체크 후 빌드 시작
-        - ts랑 eslint는 동시에 체크하면 더 효율적
-        - 이 플러그인이 동시에 진행하게 해줌.
+      - webpack은 ts체크 후 eslint체크 후 빌드 시작
+      - ts랑 eslint는 동시에 체크하면 더 효율적
+      - 이 플러그인이 동시에 진행하게 해줌.
 11. 폴더 구조 세팅
       - 페이지들은 pages
       - 페이지간 공통되는 틀은 layouts
@@ -149,27 +149,27 @@
       - Github같은 아이콘을 만들 수 있음
 
 21. @pages/List 작성
-        - workspace 하위 페이지로 탭 메뉴, 탭 데이터, 푸시버튼 컴포넌트를 자식으로 렌더링
-        - 로그인시 가장 왼쪽 탭이 활성화되어 보이도록 탭 id의 최솟값을 계산
+      - workspace 하위 페이지로 탭 메뉴, 탭 데이터, 푸시버튼 컴포넌트를 자식으로 렌더링
+      - 로그인시 가장 왼쪽 탭이 활성화되어 보이도록 탭 id의 최솟값을 계산
 
 22. @components/Tabnav 작성
-        - 접속한 유저의 탭 메뉴를 가져옴
-        - 탭 메뉴와 삭제 모달창으로 구성
-        - swr 활용하여 활성화된 탭 공유
+      - 접속한 유저의 탭 메뉴를 가져옴
+      - 탭 메뉴와 삭제 모달창으로 구성
+      - swr 활용하여 활성화된 탭 공유
         
 23. @components/Tabcontent 작성
-        - 활성화된 탭의 데이터를 보여줌
-        - '암호 보기' 버튼 클릭시 모달창 팝업
-        - 모달창 내에서 암호 입력시 암호 데이터 보여줌
+      - 활성화된 탭의 데이터를 보여줌
+      - '암호 보기' 버튼 클릭시 모달창 팝업
+      - 모달창 내에서 암호 입력시 암호 데이터 보여줌
 
 24. @components/PushButton 작성
       - 입력한 데이터 정보 제출
       - axios로 이용
 
 25. @components/HostList 작성
-        - swr로 현재 활성화된 탭 정보 활용
-        - 클릭시 탭 활성화 변경
-        - 접기/펼치기 버튼
+      - swr로 현재 활성화된 탭 정보 활용
+      - 클릭시 탭 활성화 변경
+      - 접기/펼치기 버튼
 
 26. 유저 테스트 해보기
 27. 빌드 설정

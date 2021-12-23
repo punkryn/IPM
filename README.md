@@ -279,6 +279,12 @@
 
 ```
 
+7. nginx 적용
+      - nginx 설치
+      - default.conf 수정
+      - 포트 80->8191로 리버스 프록싱
+      - React build 파일 제공
+      - https 적용
 
 ## Reference
 - https://github.com/ZeroCho/sleact

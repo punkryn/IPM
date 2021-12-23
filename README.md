@@ -286,7 +286,6 @@
       - Selinux 설정을 해야 제대로 동작
       ``` setsebool -P httpd_can_network_connect 1 ```
       - React build 파일 제공
-      - https 적용
 
 ## Reference
 - https://github.com/ZeroCho/sleact

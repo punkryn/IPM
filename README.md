@@ -4,7 +4,7 @@
 
 
 ## How to use
-1. http://punkryn.com 으로 접속
+1. https://punkryn.com 으로 접속
 2. 회원이 아니라면 회원가입을 진행
 3. 회원가입한 이메일 계정으로 로그인
 
@@ -282,11 +282,18 @@
 7. nginx 적용
       - nginx 설치
       - default.conf 수정
-      - 포트 80->8191로 리버스 프록싱
+      - 포트 443->8191로 리버스 프록싱
       - Selinux 설정을 해야 제대로 동작
       ``` setsebool -P httpd_can_network_connect 1 ```
       - React build 파일 제공
-      - 
+
+8. https 적용
+      - certbot 설치
+      - letsencrypt로 SSL 인증서 발급
+      - nginx default.conf 수정
+      - 인증서 자동 갱신
+      - http로 접속시 https로 
+
 
 ## Reference
 - https://github.com/ZeroCho/sleact

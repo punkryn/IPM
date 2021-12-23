@@ -4,7 +4,7 @@
 
 
 ## How to use
-1. http://146.56.133.92/ 으로 접속
+1. http://punkryn.com 으로 접속
 2. 회원이 아니라면 회원가입을 진행
 3. 회원가입한 이메일 계정으로 로그인
 
@@ -286,6 +286,7 @@
       - Selinux 설정을 해야 제대로 동작
       ``` setsebool -P httpd_can_network_connect 1 ```
       - React build 파일 제공
+      - 
 
 ## Reference
 - https://github.com/ZeroCho/sleact

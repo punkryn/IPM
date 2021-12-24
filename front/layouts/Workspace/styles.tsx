@@ -1,7 +1,12 @@
 import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 
 export const RightMenu = styled.div`
   float: right;
+`;
+
+export const HeaderTitle = styled.h1`
+  display: none;
 `;
 
 export const Header = styled.header`
@@ -11,6 +16,15 @@ export const Header = styled.header`
   box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1);
   padding: 5px;
   text-align: center;
+
+  ${css`
+    @media screen and (max-width: 750px) {
+      height: 70px;
+      ${HeaderTitle} {
+        display: initial;
+      }
+    }
+  `}
 `;
 
 export const ProfileImg = styled.img`
@@ -74,11 +88,18 @@ export const Workspaces = styled.div`
 
 export const Channels = styled.nav`
   width: 260px;
-  display: inline-flex;
+  // display: inline-flex;
   flex-direction: column;
   background: #3086e3;
   color: rgb(188, 171, 188);
   vertical-align: top;
+
+  ${css`
+    @media screen and (max-width: 750px) {
+      display: none;
+    }
+  `}
+
   & a {
     padding-left: 36px;
     color: inherit;
@@ -177,6 +198,12 @@ export const WorkspaceModal = styled.div`
 export const Chats = styled.div`
   flex: 1;
   overflow-y: hidden;
+
+  ${css`
+    @media screen and (max-width: 750px) {
+      height: calc(100vh - 102px);
+    }
+  `}
 `;
 
 export const WorkspaceButton = styled.button`

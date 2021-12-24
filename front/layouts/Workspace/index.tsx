@@ -7,6 +7,7 @@ import {
   Channels,
   Chats,
   Header,
+  HeaderTitle,
   LogOutButton,
   MenuScroll,
   ProfileImg,
@@ -72,6 +73,7 @@ const Workspace: FC = ({ children }) => {
   return (
     <div>
       <Header>
+        <HeaderTitle>IPM</HeaderTitle>
         <RightMenu>
           <span onClick={onClickUserProfile}>
             <ProfileImg src={gravatar.url(userData.email, { s: '28px', d: 'retro' })} alt={userData.nickname} />
